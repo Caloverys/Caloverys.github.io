@@ -13,11 +13,15 @@
 		from{
 			opacity: 1;
 		}
-		50%{
-			opacity: 1;
-		}
 		to{
 			opacity: 0.5;
+		}
+	}
+	@keyframes reverse_opacity{
+		from{
+			opacity: 0.5;
+		}to{
+			opacity: 1;
 		}
 	}
 html, body {
@@ -41,12 +45,15 @@ tr{
 
 .opacity_animation{
 	animation-name:change_opacity;
-	animation-duration:2s;
-
+	animation-duration:0.25s;
+}
+.opacity_animation_reverse{
+	animation-name:reverse_opacity;
+	animation-duration:0.25s;
 }
 th{
 /* animation-name:change_border_opacity;*/
-	animation-duration:2s;
+	animation-duration:0.25s;
 	border:2.5px solid #000;
 	 width:15px;
   height:15px;
@@ -191,20 +198,35 @@ div{
            let th = document.createElement('th');
            th.className = "parent";
             th.innerHTML = `<div class='filler opacity_animation'></div>`
-            	th.querySelector("div").style.animationDelay = `${j/3}s`;
-            	th.querySelector("div").addEventListener("animationend",event=>{
-            		console.log(this)
-            		event.target.style.opacity = 0.5;
-
-            	})
 
 
 
             tr.appendChild(th);
         }
         table.appendChild(tr);
-        
 	}
+	function apply_animation(){
+
+		document.querySelectorAll("th").forEach((th,num)=>{
+			th.querySelector("div").classList.add("opacity_animation");
+			th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/10}s`;
+            	th.querySelector("div").addEventListener("animationend",event=>{
+            		event.target.style.opacity = 0.5;
+            		if(num === raw_num * col_num - 1){
+            			Array.from(document.querySelectorAll("th")).reverse().forEach((th,num)=>{
+						th.querySelector("div").classList.add("opacity_animation_reverse");
+						th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/10}s`;
+						th.querySelector("div").addEventListener("animationend",event=>th.querySelector("div").style.opacity = 1);
+
+		})
+            		}
+            		
+            	})
+	})
+		
+
+	};
+		apply_animation()
 </script>
 </body>
 
