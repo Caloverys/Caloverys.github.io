@@ -6,7 +6,7 @@
 			border:2.5px solid rgba(0,0,0,1)
 		}
 		to{
-			border:2.5px solid rgba(0,0,0,0.1)
+			border:2.5px solid rgba(0,0,0,0.5)
 		}
 	}
 	@keyframes change_opacity{
@@ -32,8 +32,6 @@ table{
   padding: 0;
   border-spacing: 5px;
  
-
-  
   padding:5px;
 
 
@@ -43,13 +41,17 @@ tr{
 	padding:5px;
 }
 
+.border_opacity_animation{
+	animation-name:change_border_opacity;
+	animation-duration: 0.1s;
+}
 .opacity_animation{
 	animation-name:change_opacity;
-	animation-duration:0.25s;
+	animation-duration:0.1s;
 }
 .opacity_animation_reverse{
 	animation-name:reverse_opacity;
-	animation-duration:0.25s;
+	animation-duration:0.1s;
 }
 th{
 /* animation-name:change_border_opacity;*/
@@ -209,13 +211,31 @@ div{
 
 		document.querySelectorAll("th").forEach((th,num)=>{
 			th.querySelector("div").classList.add("opacity_animation");
-			th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/10}s`;
+			th.classList.add("border_opacity_animation");
+			th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
+			setTimeout(function(){
+				th.style.borderColor = "rgba(0,0,0,0.5)";
+				if(num === raw_num * col_num - 1){
+					[...document.querySelectorAll("th")].reverse().forEach((th,num)=>{
+						//th.classList.add(
+
+					})
+
+					
+				}
+			},Math.floor(num/col_num) *50);
+
+			th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
             	th.querySelector("div").addEventListener("animationend",event=>{
+
             		event.target.style.opacity = 0.5;
+
             		if(num === raw_num * col_num - 1){
+            			document.querySelectorAll("opacity_animation").forEach(i=>i.classList.remove("opacity_animation"));
             			Array.from(document.querySelectorAll("th")).reverse().forEach((th,num)=>{
 						th.querySelector("div").classList.add("opacity_animation_reverse");
-						th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/10}s`;
+						th.querySelector("div").style.animationDirection = 'reverse'
+						th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
 						th.querySelector("div").addEventListener("animationend",event=>th.querySelector("div").style.opacity = 1);
 
 		})
