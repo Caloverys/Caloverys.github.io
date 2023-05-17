@@ -133,7 +133,10 @@ div{
     0 2.5px 0 0 #888 inset;
 
 }
-
+.relative_pos{
+	position: relative;
+	height:max-content;
+}
 </style>
 <body>
 <div is="rect-container">
@@ -142,16 +145,20 @@ div{
 </div>
 
 <div id='outer_layer'>
-<table> 
+<table id='main_table'> 
 
 </table>
 </div>
-<div id='shape_preview'></div>
+
+
+<div id='shape_preview'>
+	<div class='relative_pos'></div>
+</div>
 <script> 
 
 	function retrieve_dimension(name){
 		let div = document.createElement('div');
-		div.className = name;
+		div.id = name;
 		document.body.appendChild(div);
 		let dim = div.getBoundingClientRect();
 		div.remove();
@@ -211,7 +218,7 @@ div{
 	customElements.define("shape-one",shape_1,{extends:'div'});
 */
 
-	const table = document.querySelector('table');
+	const table = document.querySelector('#main_table');
 	let raw_num = 24;
 	let col_num = 12;
 	for(let j =0; j< raw_num;j++){
@@ -229,15 +236,14 @@ div{
         table.appendChild(tr);
 	}
 	function apply_animation(){
-//setTimeout(()=>{debugger}, 800)
-		document.querySelectorAll("th").forEach((th,num)=>{
+		table.querySelectorAll("th").forEach((th,num)=>{
 			th.querySelector("div").classList.add("opacity_animation");
 			th.classList.add("border_opacity_animation");
 			th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
 			th.addEventListener("animationend", function(){
               th.style.borderColor = "rgba(0,0,0,1)";
 				if(num === raw_num * col_num - 1){
-					Array.from(document.querySelectorAll("th")).reverse().forEach((th,num)=>{
+					Array.from(table.querySelectorAll("th")).reverse().forEach((th,num)=>{
 						th.classList.add("border_opacity_animation_reverse");
 						th.animationDelay = `${Math.floor(num/col_num)/20}s`;
 						th.addEventListener("animationend",event =>{th.style.borderColor = "rgba(0,0,0,0.5)"})
@@ -252,7 +258,7 @@ div{
             		event.target.style.opacity = 1;
 
             		if(num === raw_num * col_num - 1){
-            			Array.from(document.querySelectorAll("th")).reverse().forEach((th,num)=>{
+            			Array.from(table.querySelectorAll("th")).reverse().forEach((th,num)=>{
 						th.querySelector("div").classList.add("opacity_animation_reverse");
 						th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
 						th.querySelector("div").addEventListener("animationend",event=>th.querySelector("div").style.opacity = 0.5);
@@ -266,6 +272,8 @@ div{
 		
 }
 		apply_animation();
+
+const parent_container = document.querySelector("#shape_preview");
 function shape_one(){
 	let div = document.createElement('div');
 	div.id = 'shape_one';
@@ -277,18 +285,30 @@ function shape_one(){
 		rect.innerHTML = `<div class='filler'></div>`
 		div.appendChild(rect);
 		list.push(rect);
-		rect.style.position = 'fixed';
+		rect.style.position = 'absolute';
 	}
-	document.querySelector("#shape_preview").appendChild(div);
-	const dimension = list[0].getBoundingClientRect();
-	console.log(list[0], dimension.left)
 
-	list[1].style.left = `${dimension.left + dimension.width}px`;
-   list[1].style.top= `${dimension.top}px`;
-   	list[2].style.left = `${dimension.left + dimension.width*2}px`;
-   list[2].style.top = `${dimension.top}px`;
-   list[3].style.left = `${dimension.left}px`;
-   list[3].style.top = `${dimension.top + dimension.height}px`;
+	parent_container.querySelector(".relative_pos").appendChild(div);
+
+	const dimension = list[0].getBoundingClientRect();
+	const starting_left_value = (parseFloat(parent_container.getBoundingClientRect().width) - 3 * dimension.width )/2
+	const starting_top_value = (parseFloat(parent_container.getBoundingClientRect().height - 6 * dimension.height)/2);
+	list[0].style.left = `${starting_left_value}px`;
+	list[0].style.top = `${starting_top_value}px`
+
+
+	const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
+	list[0].style.borderRight = "none";
+	list[0].style.borderBottom = "none"
+
+
+	list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
+list[1].style.borderRight = "none";
+   list[1].style.top= `${starting_top_value}px`;
+   	list[2].style.left = `${ starting_left_value + dimension.width*2 - border_size*2}px`;
+   list[2].style.top = `${starting_top_value}px`;
+   list[3].style.left = `${starting_left_value}px`;
+   list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
 
 	
 
