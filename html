@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <style>
+	body{
+		overflow: hidden;
+	}
 	@keyframes change_border_opacity{
 		from{
 			border:2.5px solid rgba(0,0,0,0.5)
@@ -68,11 +71,12 @@ tr{
 }
 
 th{
-	
 	border:2.5px solid rgba(0,0,0,0.5);
-	 width:15px;
-  height:15px;
-  
+}
+.rect{
+	 width:20px;
+  height:20px;
+  padding:auto;
 
 }
 .parent{
@@ -83,22 +87,10 @@ th{
   align-content: center;
   justify-items: center;
 }
-.rect{
-    padding:2px;
-	 box-shadow: 
-    2.5px 0 0 0 #888, 
-    0 2.5px 0 0 #888, 
-    2.5px 2.5px 0 0 #888,   
-    2.5px 0 0 0 #888 inset, 
-    0 2.5px 0 0 #888 inset;
-	 width:15px;
-  height:15px;
 
-}
 th div{
 	background-color:#000;
 	opacity:0.5;
-
 }
 .full_size{
 	width:100%;
@@ -111,14 +103,10 @@ th div{
 }
 .filler{
 	background:grey;
-
-	width:13px; 
-	height:13px;
+	width:16px; 
+	height:16px;
 	padding:0px;
 	margin:auto;
-
-
-
 }
 
 div{
@@ -130,6 +118,22 @@ div{
 	margin:auto auto;
 	padding:5px;
 }
+#shape_preview{
+	position: fixed;
+	right:425px;
+	top:10%;
+	border:2px black solid;
+	width:125px;
+	height:200px;
+	box-shadow: 
+    2.5px 0 0 0 #888, 
+    0 2.5px 0 0 #888, 
+    2.5px 2.5px 0 0 #888,   
+    2.5px 0 0 0 #888 inset, 
+    0 2.5px 0 0 #888 inset;
+
+}
+
 </style>
 <body>
 <div is="rect-container">
@@ -142,6 +146,7 @@ div{
 
 </table>
 </div>
+<div id='shape_preview'></div>
 <script> 
 
 	function retrieve_dimension(name){
@@ -156,6 +161,7 @@ div{
          width: dim.width
 			};
 	}
+	/*
 	class rect extends HTMLDivElement{
 		constructor(){
 			super();
@@ -165,7 +171,7 @@ div{
 
 		}
 	}
-/*
+
     class shape_1 extends HTMLDivElement{
     	constructor(){
     		super();
@@ -206,13 +212,14 @@ div{
 */
 
 	const table = document.querySelector('table');
-	let raw_num = 10;
-	let col_num = 10;
+	let raw_num = 24;
+	let col_num = 12;
 	for(let j =0; j< raw_num;j++){
         let tr = document.createElement('tr');
         for( let i =0; i<col_num;i++){
            let th = document.createElement('th');
-           th.className = "parent";
+
+           th.className = "parent rect";
             th.innerHTML = `<div class='filler opacity_animation'></div>`
 
 
@@ -231,16 +238,15 @@ div{
               th.style.borderColor = "rgba(0,0,0,1)";
 				if(num === raw_num * col_num - 1){
 					Array.from(document.querySelectorAll("th")).reverse().forEach((th,num)=>{
-						th.textContent = num
-											   th.classList.add("border_opacity_animation_reverse");
-						th.animationDelay = `${Math.floor((num+1)/col_num)/20}s`;
+						th.classList.add("border_opacity_animation_reverse");
+						th.animationDelay = `${Math.floor(num/col_num)/20}s`;
 						th.addEventListener("animationend",event =>{th.style.borderColor = "rgba(0,0,0,0.5)"})
 
 					})
 				}
 			})
 
-			th.querySelector("div").style.animationDelay = `${Math.floor((num+1)/col_num)/20}s`;
+			th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
             	th.querySelector("div").addEventListener("animationend",event=>{
 
             		event.target.style.opacity = 1;
@@ -259,7 +265,35 @@ div{
 	})
 		
 }
-		apply_animation()
+		apply_animation();
+function shape_one(){
+	let div = document.createElement('div');
+	div.id = 'shape_one';
+	const list =[];
+	for(let i = 0; i< 4;i++){
+		let rect = document.createElement('div');
+		rect.className = 'rect center';
+		rect.style.border = '2.5px black solid';
+		rect.innerHTML = `<div class='filler'></div>`
+		div.appendChild(rect);
+		list.push(rect);
+		rect.style.position = 'fixed';
+	}
+	document.querySelector("#shape_preview").appendChild(div);
+	const dimension = list[0].getBoundingClientRect();
+	console.log(list[0], dimension.left)
+
+	list[1].style.left = `${dimension.left + dimension.width}px`;
+   list[1].style.top= `${dimension.top}px`;
+   	list[2].style.left = `${dimension.left + dimension.width*2}px`;
+   list[2].style.top = `${dimension.top}px`;
+   list[3].style.left = `${dimension.left}px`;
+   list[3].style.top = `${dimension.top + dimension.height}px`;
+
+	
+
+}
+shape_one()
 </script>
 </body>
 
