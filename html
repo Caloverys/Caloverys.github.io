@@ -3,27 +3,36 @@
 <style>
 	@keyframes change_border_opacity{
 		from{
-			border:2.5px solid rgba(0,0,0,1)
+			border:2.5px solid rgba(0,0,0,0.5)
 		}
 		to{
-			border:2.5px solid rgba(0,0,0,0.5)
+			border:2.5px solid rgba(0,0,0,1)
 		}
 	}
 	@keyframes change_opacity{
 		from{
-			opacity: 1;
+			opacity: 0.5;
 		}
 		to{
-			opacity: 0.5;
+			opacity: 1;
 		}
 	}
 	@keyframes reverse_opacity{
 		from{
-			opacity: 0.5;
-		}to{
 			opacity: 1;
+		}to{
+			opacity: 0.5;
 		}
 	}
+	@keyframes reverse_border_opacity{
+		from{
+			border:2.5px solid rgba(0,0,0,1)
+		}
+		to{
+			border:2.5px solid rgba(0,0,0,0.5);
+		}
+	}
+	
 html, body {
     width: 100%;
 }
@@ -45,6 +54,10 @@ tr{
 	animation-name:change_border_opacity;
 	animation-duration: 0.1s;
 }
+.border_opacity_animation_reverse{
+	animation-name:reverse_border_opacity;
+	animation-duration: 0.1s;
+}
 .opacity_animation{
 	animation-name:change_opacity;
 	animation-duration:0.1s;
@@ -53,10 +66,10 @@ tr{
 	animation-name:reverse_opacity;
 	animation-duration:0.1s;
 }
+
 th{
-/* animation-name:change_border_opacity;*/
-	animation-duration:0.25s;
-	border:2.5px solid #000;
+	
+	border:2.5px solid rgba(0,0,0,0.5);
 	 width:15px;
   height:15px;
   
@@ -84,6 +97,7 @@ th{
 }
 th div{
 	background-color:#000;
+	opacity:0.5;
 
 }
 .full_size{
@@ -192,7 +206,7 @@ div{
 */
 
 	const table = document.querySelector('table');
-	let raw_num = 30
+	let raw_num = 10;
 	let col_num = 10;
 	for(let j =0; j< raw_num;j++){
         let tr = document.createElement('tr');
@@ -208,35 +222,35 @@ div{
         table.appendChild(tr);
 	}
 	function apply_animation(){
-
+//setTimeout(()=>{debugger}, 800)
 		document.querySelectorAll("th").forEach((th,num)=>{
 			th.querySelector("div").classList.add("opacity_animation");
 			th.classList.add("border_opacity_animation");
 			th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-			setTimeout(function(){
-				th.style.borderColor = "rgba(0,0,0,0.5)";
+			th.addEventListener("animationend", function(){
+              th.style.borderColor = "rgba(0,0,0,1)";
 				if(num === raw_num * col_num - 1){
-					[...document.querySelectorAll("th")].reverse().forEach((th,num)=>{
-						//th.classList.add(
+					Array.from(document.querySelectorAll("th")).reverse().forEach((th,num)=>{
+						th.textContent = num
+											   th.classList.add("border_opacity_animation_reverse");
+						th.animationDelay = `${Math.floor((num+1)/col_num)/20}s`;
+						th.addEventListener("animationend",event =>{th.style.borderColor = "rgba(0,0,0,0.5)"})
 
 					})
-
-					
 				}
-			},Math.floor(num/col_num) *50);
+			})
 
-			th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
+			th.querySelector("div").style.animationDelay = `${Math.floor((num+1)/col_num)/20}s`;
             	th.querySelector("div").addEventListener("animationend",event=>{
 
-            		event.target.style.opacity = 0.5;
+            		event.target.style.opacity = 1;
 
             		if(num === raw_num * col_num - 1){
-            			document.querySelectorAll("opacity_animation").forEach(i=>i.classList.remove("opacity_animation"));
             			Array.from(document.querySelectorAll("th")).reverse().forEach((th,num)=>{
 						th.querySelector("div").classList.add("opacity_animation_reverse");
-						th.querySelector("div").style.animationDirection = 'reverse'
 						th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-						th.querySelector("div").addEventListener("animationend",event=>th.querySelector("div").style.opacity = 1);
+						th.querySelector("div").addEventListener("animationend",event=>th.querySelector("div").style.opacity = 0.5);
+
 
 		})
             		}
@@ -244,8 +258,7 @@ div{
             	})
 	})
 		
-
-	};
+}
 		apply_animation()
 </script>
 </body>
