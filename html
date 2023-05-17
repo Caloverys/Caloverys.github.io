@@ -275,8 +275,29 @@ div{
 
 const parent_container = document.querySelector("#shape_preview");
 function shape_one(){
-	let div = document.createElement('div');
-	div.id = 'shape_one';
+	const list = create_basic_shape("shape_one")
+	const dimension = list[0].getBoundingClientRect();
+	const starting_left_value = (parseFloat(parent_container.getBoundingClientRect().width) - 3 * dimension.width )/2
+	const starting_top_value = (parseFloat(parent_container.getBoundingClientRect().height)/3 - 2 * dimension.height);
+	list[0].style.left = `${starting_left_value}px`;
+	list[0].style.top = `${starting_top_value}px`
+
+
+	const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
+	list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
+   list[1].style.top= `${starting_top_value}px`;
+   	list[2].style.left = `${ starting_left_value + dimension.width*2 - border_size*2}px`;
+   list[2].style.top = `${starting_top_value}px`;
+   list[3].style.left = `${starting_left_value}px`;
+   list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
+
+	
+
+}
+
+function create_basic_shape(id){
+let div = document.createElement('div');
+	div.id = id;
 	const list =[];
 	for(let i = 0; i< 4;i++){
 		let rect = document.createElement('div');
@@ -289,31 +310,29 @@ function shape_one(){
 	}
 
 	parent_container.querySelector(".relative_pos").appendChild(div);
-
+	return list;
+}
+function shape_two(){
+	const list = create_basic_shape("shape_two")
 	const dimension = list[0].getBoundingClientRect();
-	const starting_left_value = (parseFloat(parent_container.getBoundingClientRect().width) - 3 * dimension.width )/2
-	const starting_top_value = (parseFloat(parent_container.getBoundingClientRect().height - 6 * dimension.height)/2);
+	const starting_left_value = (parseFloat(parent_container.getBoundingClientRect().width) - 2 * dimension.width)/2
+	const starting_top_value = (parseFloat(parent_container.getBoundingClientRect().height)/3*2 - 2 * dimension.height);
 	list[0].style.left = `${starting_left_value}px`;
 	list[0].style.top = `${starting_top_value}px`
 
 
 	const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
-	list[0].style.borderRight = "none";
-	list[0].style.borderBottom = "none"
-
-
 	list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
-list[1].style.borderRight = "none";
    list[1].style.top= `${starting_top_value}px`;
-   	list[2].style.left = `${ starting_left_value + dimension.width*2 - border_size*2}px`;
-   list[2].style.top = `${starting_top_value}px`;
-   list[3].style.left = `${starting_left_value}px`;
+   	list[2].style.left = `${starting_left_value}px`;
+   list[2].style.top = `${starting_top_value + dimension.height - border_size}px`;
+   list[3].style.left = `${starting_left_value + dimension.width - border_size}px`;
    list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
 
-	
-
 }
-shape_one()
+
+shape_one();
+shape_two();
 </script>
 </body>
 
