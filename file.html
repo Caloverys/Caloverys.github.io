@@ -124,7 +124,7 @@ div{
 	top:10%;
 	border:2px black solid;
 	width:125px;
-	height:300px;
+	height:350px;
 
 
 }
@@ -431,9 +431,9 @@ function shape_7(sequence) {
 function drop_function() {
   const current_shape = parent_container.querySelectorAll('.shape_container')[0];
   const max_x = current_shape.getAttribute("max_x");
-  const max_y = current_shape.getAttribute('max_y')
+  const max_y = current_shape.getAttribute('max_y');
   const value_skipped = JSON.parse(current_shape.getAttribute('value_skip'))
-  window.random_pos_x = Math.floor(Math.random() * (col_num - max_x - 1));
+  window.random_pos_x = Math.floor(Math.random() * (col_num - max_x+1));
   for (let i = 0; i < max_y; i++) {
     for (let j = 0; j < max_x; j++) {
       if (!value_skipped.some((arr, num) => arr[0] === i && arr[1] === j)) {
@@ -455,7 +455,6 @@ function drop_function() {
           if (i + 1 >= raw_num || rects_list[i + 1][j].classList.contains("locked")) {
             is_work = false;
             break;
-
           }
         }
       }
@@ -466,7 +465,7 @@ function drop_function() {
         rects_list[arr[0] - 1][arr[1]].classList.add('selected', "locked");
       } else rects_list[arr[0]][arr[1]].classList.add('selected');
     })
-  }, 2000)
+  }, 500)
 }
 
 
@@ -520,6 +519,25 @@ random_shape();
 
 drop_function();
 
+
+function maximum_row(initial_pos){
+  const max_x = current_shape_list[0].getAttribute("max_x");
+  const max_y = current_shape_list[0].getAttribute('max_y');
+  const value_skip_list = current_shape_list[0].getAttribute('value_skip');
+	for(let i=raw_num-1; i>=0;i--){
+		let is_pass= true;
+		for(let y =0; y<max_y;y++){
+			for(let j =0; j< max_x;j++){
+				if(rects_list[i - max_y+1][initial_pos + j].classList.contains('locked') || value_skip.some((arr, num) => arr[0] === y && arr[1] === j)) {
+					is_pass = false;
+					break;
+			}
+		}
+		if(is_pass) return i;
+		
+		
+	}
+}
 
 
 </script>
