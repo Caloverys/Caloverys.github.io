@@ -430,6 +430,8 @@ function shape_7(sequence) {
 
 function interval_function(){
 	 let is_work = true;
+	 let has_ended = false;
+
     let new_position_list = [];
     for (let i = 0; i < rects_list.length; i++) {
       for (let j = 0; j < rects_list[i].length; j++) {
@@ -447,11 +449,14 @@ function interval_function(){
     new_position_list.forEach(arr => {
       if (!is_work) {
         rects_list[arr[0] - 1][arr[1]].classList.add('selected', "locked");
-            window.clearInterval(interval);
-            random_shape();
-            drop_function();
+        has_ended = true;
       } else rects_list[arr[0]][arr[1]].classList.add('selected');
     })
+    if(has_ended){
+    	  window.clearInterval(interval);
+            random_shape();
+            drop_function();
+    }
 }
 function drop_function() {
   const current_shape = parent_container.querySelectorAll('.shape_container')[0];
@@ -469,7 +474,7 @@ function drop_function() {
 
 
   }
-  interval = setInterval(interval_function, 2000)
+  interval = setInterval(interval_function, 500)
 }
 
 
