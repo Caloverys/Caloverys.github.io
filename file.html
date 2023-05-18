@@ -158,304 +158,367 @@ background-color:red;
 </div>
 <button> Start</button>
 <script> 
-
-	function retrieve_dimension(name){
-		let div = document.createElement('div');
-		div.id = name;
-		document.body.appendChild(div);
-		let dim = div.getBoundingClientRect();
-		div.remove();
-		return {
-			height: dim.height,
-         width: dim.width
-			};
-	}
-
-	const table = document.querySelector('#main_table');
-	let raw_num = 24;
-	let col_num = 12;
-	const rects_list = [];
-	for(let j =0; j< raw_num;j++){
-        let tr = document.createElement('tr');
-        const sub_list = [];
-        for( let i =0; i<col_num;i++){
-           let th = document.createElement('th');
-
-           th.className = "parent rect";
-            th.innerHTML = `<div class='filler opacity_animation'></div>`
-            tr.appendChild(th);
-            sub_list.push(th);
-        }
-        rects_list.push(sub_list);
-        table.appendChild(tr);
-	}
-	function apply_animation(){
-		table.querySelectorAll("th").forEach((th,num)=>{
-			th.querySelector("div").classList.add("opacity_animation");
-			th.classList.add("border_opacity_animation");
-			th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-			th.addEventListener("animationend", function(){
-              th.style.borderColor = "rgba(0,0,0,1)";
-				if(num === raw_num * col_num - 1){
-					Array.from(table.querySelectorAll("th")).reverse().forEach((th,num)=>{
-						th.classList.add("border_opacity_animation_reverse");
-						th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-						th.addEventListener("animationend",event =>{th.style.borderColor = "rgba(0,0,0,0.15)"})
-
-					})
-				}
-			})
-
-			th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-            	th.querySelector("div").addEventListener("animationend",event=>{
-
-            		event.target.style.opacity = 1;
-
-            		if(num === raw_num * col_num - 1){
-            			Array.from(table.querySelectorAll("th")).reverse().forEach((th,num)=>{
-						th.querySelector("div").classList.add("opacity_animation_reverse");
-						th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-						th.querySelector("div").addEventListener("animationend",event=>th.querySelector("div").style.opacity = 0.15);
-
-
-		})
-            		}
-            		
-            	})
-	})
-		
+	let interval;
+	let current_shape_list = [];
+function retrieve_dimension(name) {
+  let div = document.createElement('div');
+  div.id = name;
+  document.body.appendChild(div);
+  let dim = div.getBoundingClientRect();
+  div.remove();
+  return {
+    height: dim.height,
+    width: dim.width
+  };
 }
-		apply_animation();
+
+const table = document.querySelector('#main_table');
+let raw_num = 24;
+let col_num = 12;
+const rects_list = [];
+for (let j = 0; j < raw_num; j++) {
+  let tr = document.createElement('tr');
+  const sub_list = [];
+  for (let i = 0; i < col_num; i++) {
+    let th = document.createElement('th');
+
+    th.className = "parent rect";
+    th.innerHTML = `<div class='filler opacity_animation'></div>`
+    tr.appendChild(th);
+    sub_list.push(th);
+  }
+  rects_list.push(sub_list);
+  table.appendChild(tr);
+}
+
+function apply_animation() {
+  table.querySelectorAll("th").forEach((th, num) => {
+    th.querySelector("div").classList.add("opacity_animation");
+    th.classList.add("border_opacity_animation");
+    th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
+    th.addEventListener("animationend", function() {
+      th.style.borderColor = "rgba(0,0,0,1)";
+      if (num === raw_num * col_num - 1) {
+        Array.from(table.querySelectorAll("th")).reverse().forEach((th, num) => {
+          th.classList.add("border_opacity_animation_reverse");
+          th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
+          th.addEventListener("animationend", event => {
+            th.style.borderColor = "rgba(0,0,0,0.15)"
+          })
+
+        })
+      }
+    })
+
+    th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
+    th.querySelector("div").addEventListener("animationend", event => {
+
+      event.target.style.opacity = 1;
+
+      if (num === raw_num * col_num - 1) {
+        Array.from(table.querySelectorAll("th")).reverse().forEach((th, num) => {
+          th.querySelector("div").classList.add("opacity_animation_reverse");
+          th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
+          th.querySelector("div").addEventListener("animationend", event => th.querySelector("div").style.opacity = 0.15);
+
+
+        })
+      }
+
+    })
+  })
+
+}
+apply_animation();
 
 const parent_container = document.querySelector("#shape_preview");
-function shape_1(sequence){
-	const list = create_basic_shape("shape_one")
-	const dimension = list[0].getBoundingClientRect();
-	const starting_left_value = initial_position(sequence,dimension,3,2).x;
-	const starting_top_value = initial_position(sequence,dimension,3,2).y;
-	list[0].style.left = `${starting_left_value}px`;
-	list[0].style.top = `${starting_top_value}px`
+
+function shape_1(sequence) {
+  const list = create_basic_shape("shape_one")
+  const dimension = list[0].getBoundingClientRect();
+  const starting_left_value = initial_position(sequence, dimension, 3, 2).x;
+  const starting_top_value = initial_position(sequence, dimension, 3, 2).y;
+  list[0].style.left = `${starting_left_value}px`;
+  list[0].style.top = `${starting_top_value}px`
 
 
-	const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
-	list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
-   list[1].style.top= `${starting_top_value}px`;
-   	list[2].style.left = `${ starting_left_value + dimension.width*2 - border_size*2}px`;
-   list[2].style.top = `${starting_top_value}px`;
-   list[3].style.left = `${starting_left_value}px`;
-   list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
-   list[0].parentNode.setAttribute("max_x",3);
-   list[0].parentNode.setAttribute("max_y",2);
-    list[0].parentNode.setAttribute("value_skip",JSON.stringify([[1,1],[1,2]]));
+  const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
+  list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[1].style.top = `${starting_top_value}px`;
+  list[2].style.left = `${ starting_left_value + dimension.width*2 - border_size*2}px`;
+  list[2].style.top = `${starting_top_value}px`;
+  list[3].style.left = `${starting_left_value}px`;
+  list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
+  list[0].parentNode.setAttribute("max_x", 3);
+  list[0].parentNode.setAttribute("max_y", 2);
+     list[0].parentNode.setAttribute("number_of_rects", 4);
+  list[0].parentNode.setAttribute("value_skip", JSON.stringify([
+    [1, 1],
+    [1, 2]
+  ]));
 
-	
-
-}
-function initial_position(level, dimension, max_x,max_y){
-
-	 return{
-		x: (parseFloat(parent_container.getBoundingClientRect().width) - max_x * dimension.width )/2,
-      y: (parseFloat(parent_container.getBoundingClientRect().height)* level/5 + (parseFloat(parent_container.getBoundingClientRect().height)/5 - max_y * dimension.height)/2)
-	}
-}
-
-function create_basic_shape(id){
-let div = document.createElement('div');
-	div.id = id;
-	div.className = 'shape_container';
-	const list =[];
-	for(let i = 0; i< 4;i++){
-		let rect = document.createElement('div');
-		rect.className = 'rect center';
-		rect.style.border = '2.5px black solid';
-		rect.innerHTML = `<div class='filler'></div>`
-		div.appendChild(rect);
-		list.push(rect);
-		rect.style.position = 'absolute';
-	}
-	parent_container.querySelector(".relative_pos").appendChild(div);
-
-	return list;
-}
-function shape_2(sequence){
-	const list = create_basic_shape("shape_two");
-	const dimension = list[0].getBoundingClientRect();
-	const starting_left_value = initial_position(sequence,dimension,2,2).x;
-	const starting_top_value = initial_position(sequence,dimension,2,2).y;
-	list[0].style.left = `${starting_left_value}px`;
-	list[0].style.top = `${starting_top_value}px`
-
-	const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
-	list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
-   list[1].style.top= `${starting_top_value}px`;
-   	list[2].style.left = `${starting_left_value}px`;
-   list[2].style.top = `${starting_top_value + dimension.height - border_size}px`;
-   list[3].style.left = `${starting_left_value + dimension.width - border_size}px`;
-   list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
-      list[0].parentNode.setAttribute("max_x",2);
-   list[0].parentNode.setAttribute("max_y",2);
-   list[0].parentNode.setAttribute("value_skip",JSON.stringify([]));
 
 
 }
 
-function shape_3(sequence){
-	const list = create_basic_shape("shape_three")
-	const dimension = list[0].getBoundingClientRect();
-	const starting_left_value = initial_position(sequence,dimension,3,2).x;
-	const starting_top_value = initial_position(sequence,dimension,3,2).y;
-	list[0].style.left = `${starting_left_value}px`;
-	list[0].style.top = `${starting_top_value}px`
+function initial_position(level, dimension, max_x, max_y) {
+
+  return {
+    x: (parseFloat(parent_container.getBoundingClientRect().width) - max_x * dimension.width) / 2,
+    y: (parseFloat(parent_container.getBoundingClientRect().height) * level / 5 + (parseFloat(parent_container.getBoundingClientRect().height) / 5 - max_y * dimension.height) / 2)
+  }
+}
+
+function create_basic_shape(id) {
+  let div = document.createElement('div');
+  div.id = id;
+  div.className = 'shape_container';
+  const list = [];
+  for (let i = 0; i < 4; i++) {
+    let rect = document.createElement('div');
+    rect.className = 'rect center';
+    rect.style.border = '2.5px black solid';
+    rect.innerHTML = `<div class='filler'></div>`
+    div.appendChild(rect);
+    list.push(rect);
+    rect.style.position = 'absolute';
+  }
+  parent_container.querySelector(".relative_pos").appendChild(div);
+
+  return list;
+}
+
+function shape_2(sequence) {
+  const list = create_basic_shape("shape_two");
+  const dimension = list[0].getBoundingClientRect();
+  const starting_left_value = initial_position(sequence, dimension, 2, 2).x;
+  const starting_top_value = initial_position(sequence, dimension, 2, 2).y;
+  list[0].style.left = `${starting_left_value}px`;
+  list[0].style.top = `${starting_top_value}px`
+
+  const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
+  list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[1].style.top = `${starting_top_value}px`;
+  list[2].style.left = `${starting_left_value}px`;
+  list[2].style.top = `${starting_top_value + dimension.height - border_size}px`;
+  list[3].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
+  list[0].parentNode.setAttribute("max_x", 2);
+  list[0].parentNode.setAttribute("max_y", 2);
+     list[0].parentNode.setAttribute("number_of_rects", 4);
+  list[0].parentNode.setAttribute("value_skip", JSON.stringify([]));
 
 
-	const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
-	list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
-   list[1].style.top= `${starting_top_value}px`;
-   	list[2].style.left = `${starting_left_value + dimension.width - border_size}px`;
-   list[2].style.top = `${starting_top_value + dimension.height - border_size}px`;
-   list[3].style.left = `${starting_left_value + 2*dimension.width - border_size * 2}px`;
-   list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
-      list[0].parentNode.setAttribute("max_x",3);
-   list[0].parentNode.setAttribute("max_y",2);
-    list[0].parentNode.setAttribute("value_skip",JSON.stringify([[0,2],[1,0]]));
+}
+
+function shape_3(sequence) {
+  const list = create_basic_shape("shape_three")
+  const dimension = list[0].getBoundingClientRect();
+  const starting_left_value = initial_position(sequence, dimension, 3, 2).x;
+  const starting_top_value = initial_position(sequence, dimension, 3, 2).y;
+  list[0].style.left = `${starting_left_value}px`;
+  list[0].style.top = `${starting_top_value}px`
+
+
+  const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
+  list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[1].style.top = `${starting_top_value}px`;
+  list[2].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[2].style.top = `${starting_top_value + dimension.height - border_size}px`;
+  list[3].style.left = `${starting_left_value + 2*dimension.width - border_size * 2}px`;
+  list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
+  list[0].parentNode.setAttribute("max_x", 3);
+  list[0].parentNode.setAttribute("max_y", 2);
+     list[0].parentNode.setAttribute("number_of_rects", 4);
+  list[0].parentNode.setAttribute("value_skip", JSON.stringify([
+    [0, 2],
+    [1, 0]
+  ]));
 
 }
 
 
-function shape_4(sequence){
-	const list = create_basic_shape("shape_four")
-	const dimension = list[0].getBoundingClientRect();
-	const starting_left_value = initial_position(sequence,dimension,4,1).x;
-	const starting_top_value = initial_position(sequence,dimension,4,1).y;
-	list[0].style.left = `${starting_left_value}px`;
-	list[0].style.top = `${starting_top_value}px`;
-	const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
-	list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
-   list[1].style.top= `${starting_top_value}px`;
-   	list[2].style.left = `${starting_left_value + 2*dimension.width - 2*border_size}px`;
-   list[2].style.top = `${starting_top_value}px`;
-   list[3].style.left = `${starting_left_value + 3*dimension.width - border_size * 3}px`;
-   list[3].style.top = `${starting_top_value}px`;
-      list[0].parentNode.setAttribute("max_x",4);
-   list[0].parentNode.setAttribute("max_y",1);
-       list[0].parentNode.setAttribute("value_skip",JSON.stringify([]));
+function shape_4(sequence) {
+  const list = create_basic_shape("shape_four")
+  const dimension = list[0].getBoundingClientRect();
+  const starting_left_value = initial_position(sequence, dimension, 4, 1).x;
+  const starting_top_value = initial_position(sequence, dimension, 4, 1).y;
+  list[0].style.left = `${starting_left_value}px`;
+  list[0].style.top = `${starting_top_value}px`;
+  const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
+  list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[1].style.top = `${starting_top_value}px`;
+  list[2].style.left = `${starting_left_value + 2*dimension.width - 2*border_size}px`;
+  list[2].style.top = `${starting_top_value}px`;
+  list[3].style.left = `${starting_left_value + 3*dimension.width - border_size * 3}px`;
+  list[3].style.top = `${starting_top_value}px`;
+  list[0].parentNode.setAttribute("max_x", 4);
+  list[0].parentNode.setAttribute("max_y", 1);
+     list[0].parentNode.setAttribute("number_of_rects", 4);
+  list[0].parentNode.setAttribute("value_skip", JSON.stringify([]));
 
 }
-function shape_5(sequence){
-	const list = create_basic_shape("shape_five")
-	const dimension = list[0].getBoundingClientRect();
-	const starting_left_value = initial_position(sequence,dimension,3,2).x;
-	const starting_top_value = initial_position(sequence,dimension,3,2).y;
-	const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
-	list[0].style.left = `${starting_left_value + dimension.width - border_size}px`;
-	list[0].style.top = `${starting_top_value}px`
-	list[1].style.left = `${starting_left_value}px`;
-   list[1].style.top= `${starting_top_value + dimension.height - border_size }px`;
-   	list[2].style.left = `${starting_left_value + dimension.width - border_size}px`;
-   list[2].style.top = `${starting_top_value + dimension.height - border_size}px`;
-   list[3].style.left = `${starting_left_value + 2*dimension.width - border_size * 2}px`;
-   list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
-      list[0].parentNode.setAttribute("max_x",3);
-   list[0].parentNode.setAttribute("max_y",2);
-     list[0].parentNode.setAttribute("value_skip",JSON.stringify([[0,0],[0,2]]));
+
+function shape_5(sequence) {
+  const list = create_basic_shape("shape_five")
+  const dimension = list[0].getBoundingClientRect();
+  const starting_left_value = initial_position(sequence, dimension, 3, 2).x;
+  const starting_top_value = initial_position(sequence, dimension, 3, 2).y;
+  const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
+  list[0].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[0].style.top = `${starting_top_value}px`
+  list[1].style.left = `${starting_left_value}px`;
+  list[1].style.top = `${starting_top_value + dimension.height - border_size }px`;
+  list[2].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[2].style.top = `${starting_top_value + dimension.height - border_size}px`;
+  list[3].style.left = `${starting_left_value + 2*dimension.width - border_size * 2}px`;
+  list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
+  list[0].parentNode.setAttribute("max_x", 3);
+  list[0].parentNode.setAttribute("max_y", 2);
+   list[0].parentNode.setAttribute("number_of_rects", 4);
+  list[0].parentNode.setAttribute("value_skip", JSON.stringify([
+    [0, 0],
+    [0, 2]
+  ]));
 }
 
-function shape_6(sequence){
-	const list = create_basic_shape("shape_six")
-	const dimension = list[0].getBoundingClientRect();
-	const starting_left_value = initial_position(sequence,dimension,3,2).x;
-	const starting_top_value = initial_position(sequence,dimension,3,2).y;
-	const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
-	list[0].style.left = `${starting_left_value }px`;
-	list[0].style.top = `${starting_top_value}px`
-	list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
-   list[1].style.top= `${starting_top_value }px`;
-   	list[2].style.left = `${starting_left_value + 2*dimension.width - 2*border_size}px`;
-   list[2].style.top = `${starting_top_value }px`;
-   list[3].style.left = `${starting_left_value + 2*dimension.width - 2*border_size}px`;
-   list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
-      list[0].parentNode.setAttribute("max_x",3);
-   list[0].parentNode.setAttribute("max_y",2);
-     list[0].parentNode.setAttribute("value_skip",JSON.stringify([[1,0],[1,1]]));
-}
-function shape_7(sequence){
-	const list = create_basic_shape("shape_seven")
-	const dimension = list[0].getBoundingClientRect();
-	const starting_left_value = initial_position(sequence,dimension,3,2).x;
-	const starting_top_value = initial_position(sequence,dimension,3,2).y;
-	const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
-	list[0].style.left = `${starting_left_value + dimension.width - border_size}px`;
-	list[0].style.top = `${starting_top_value}px`
-	list[1].style.left = `${starting_left_value}px`;
-   list[1].style.top= `${starting_top_value + dimension.height - border_size }px`;
-   	list[2].style.left = `${starting_left_value + dimension.width - border_size}px`;
-   list[2].style.top = `${starting_top_value + dimension.height - border_size}px`;
-   list[3].style.left = `${starting_left_value + 2*dimension.width - border_size * 2}px`;
-   list[3].style.top = `${starting_top_value}px`;
-      list[0].parentNode.setAttribute("max_x",3);
-   list[0].parentNode.setAttribute("max_y",2);
-     list[0].parentNode.setAttribute("value_skip",JSON.stringify([[0,0],[1,2]]));
+function shape_6(sequence) {
+  const list = create_basic_shape("shape_six")
+  const dimension = list[0].getBoundingClientRect();
+  const starting_left_value = initial_position(sequence, dimension, 3, 2).x;
+  const starting_top_value = initial_position(sequence, dimension, 3, 2).y;
+  const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
+  list[0].style.left = `${starting_left_value }px`;
+  list[0].style.top = `${starting_top_value}px`
+  list[1].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[1].style.top = `${starting_top_value }px`;
+  list[2].style.left = `${starting_left_value + 2*dimension.width - 2*border_size}px`;
+  list[2].style.top = `${starting_top_value }px`;
+  list[3].style.left = `${starting_left_value + 2*dimension.width - 2*border_size}px`;
+  list[3].style.top = `${starting_top_value + dimension.height - border_size}px`;
+  list[0].parentNode.setAttribute("max_x", 3);
+  list[0].parentNode.setAttribute("max_y", 2);
+     list[0].parentNode.setAttribute("number_of_rects", 4);
+  list[0].parentNode.setAttribute("value_skip", JSON.stringify([
+    [1, 0],
+    [1, 1]
+  ]));
 }
 
-function drop_function(){
-	const current_shape = parent_container.querySelectorAll('.shape_container')[0];
-	console.log(current_shape)
-	const max_x = current_shape.getAttribute("max_x");
-	const max_y = current_shape.getAttribute('max_y')
-	const value_skipped = JSON.parse(current_shape.getAttribute('value_skip'))
-	const random_pos_x = Math.floor(Math.random() * (col_num - max_x-1));
-	for(let i =0; i<max_y;i++){
-		for(let j =0; j<max_x;j++){
-			if(!value_skipped.some((arr,num) =>arr[0] === i && arr[1] === j)){
-				rects_list[i][random_pos_x+j].classList.add('selected')
-			}
-                 
-		}
-	    
+function shape_7(sequence) {
+  const list = create_basic_shape("shape_seven")
+  const dimension = list[0].getBoundingClientRect();
+  const starting_left_value = initial_position(sequence, dimension, 3, 2).x;
+  const starting_top_value = initial_position(sequence, dimension, 3, 2).y;
+  const border_size = parseFloat(window.getComputedStyle(list[0]).getPropertyValue("border-width"));
+  list[0].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[0].style.top = `${starting_top_value}px`
+  list[1].style.left = `${starting_left_value}px`;
+  list[1].style.top = `${starting_top_value + dimension.height - border_size }px`;
+  list[2].style.left = `${starting_left_value + dimension.width - border_size}px`;
+  list[2].style.top = `${starting_top_value + dimension.height - border_size}px`;
+  list[3].style.left = `${starting_left_value + 2*dimension.width - border_size * 2}px`;
+  list[3].style.top = `${starting_top_value}px`;
+  list[0].parentNode.setAttribute("max_x", 3);
+  list[0].parentNode.setAttribute("max_y", 2);  
+   list[0].parentNode.setAttribute("number_of_rects", 4);
+  list[0].parentNode.setAttribute("value_skip", JSON.stringify([
+    [0, 0],
+    [1, 2]
+  ]));
+}
 
-	}
-	setInterval(()=>{
-		let is_work = true;
-		let new_position_list = [];
-for (let i =0;i< rects_list.length;i++){
-	for(let j = 0; j<rects_list[i].length; j++){
-		if(rects_list[i][j].classList.contains("selected")){
-		rects_list[i][j].classList.remove("selected");
-      new_position_list.push([i+1,j]);
-      if(i+1 >=raw_num || rects_list[i+1][j].classList.contains("locked") ){
-      	is_work = false;
-      	break;
-
+function drop_function() {
+  const current_shape = parent_container.querySelectorAll('.shape_container')[0];
+  const max_x = current_shape.getAttribute("max_x");
+  const max_y = current_shape.getAttribute('max_y')
+  const value_skipped = JSON.parse(current_shape.getAttribute('value_skip'))
+  window.random_pos_x = Math.floor(Math.random() * (col_num - max_x - 1));
+  for (let i = 0; i < max_y; i++) {
+    for (let j = 0; j < max_x; j++) {
+      if (!value_skipped.some((arr, num) => arr[0] === i && arr[1] === j)) {
+        rects_list[i][random_pos_x + j].classList.add('selected')
       }
-	}
-	}
+
+    }
+
+
+  }
+  interval = setInterval(() => {
+    let is_work = true;
+    let new_position_list = [];
+    for (let i = 0; i < rects_list.length; i++) {
+      for (let j = 0; j < rects_list[i].length; j++) {
+        if (rects_list[i][j].classList.contains("selected")) {
+          rects_list[i][j].classList.remove("selected");
+          new_position_list.push([parseFloat(i) + 1, j]);
+          if (i + 1 >= raw_num || rects_list[i + 1][j].classList.contains("locked")) {
+            is_work = false;
+            break;
+
+          }
+        }
+      }
+      if(new_position_list.length ==current_shape.getAttribute('number_of_rects')) break;
+    }
+    new_position_list.forEach(arr => {
+      if (!is_work) {
+        rects_list[arr[0] - 1][arr[1]].classList.add('selected', "locked");
+      } else rects_list[arr[0]][arr[1]].classList.add('selected');
+    })
+  }, 2000)
 }
-new_position_list.forEach(arr=>{
-   if(!is_work){
-
-	rects_list[arr[0]-1][arr[1]].classList.add('selected',"locked"); 
-   } else rects_list[arr[0]][arr[1]].classList.add('selected'); 
 
 
-})
-},500)
+function random_shape() {
+  for (let i = 0; i < 5; i++) {
+    let random_num = Math.floor(Math.random() * 7) + 1;
+    current_shape_list.push(random_num);
+    eval(`shape_${random_num}(${i})`);
+  }
 }
 
 
+document.addEventListener("keypress", event => {
+  if (event.key == " " || event.code == "Space" || event.keyCode == 32) {
 
-function random_shape(){
-	for(let i =0; i<5;i++){
-		let random_num = Math.floor(Math.random() * 7) + 1;
-		eval(`shape_${random_num}(${i})`);
-	}
-}
+    const current_shape = document.querySelectorAll('.shape_container')[0];
+    for (let current_index_y = rects_list.length - 1; current_index_y >= 0; current_index_y--) {
+      let pass = true;
+      for (let current_index_x = rects_list[current_index_y].length - 1; current_index_x >= 0; current_index_x--) {
+        if (rects_list[current_index_y][current_index_x].classList.contains('locked')) {
+          pass = false;
+          break;
+        }
+      }
+      if (pass) {
+      	let max_y = current_shape.getAttribute("max_y");
+        for (let i = 0; i < max_y; i++) {
+          for (let j = 0; j < current_shape.getAttribute("max_x"); j++) {
+
+            if (!JSON.parse(current_shape.getAttribute("value_skip")).some((arr, num) => arr[0] === i && arr[1] === j)) rects_list[current_index_y + i - max_y+1][random_pos_x + j].classList.add('selected',"locked");
+          }
+        }
+      }
+      break;
+    }
+    document.querySelectorAll('.selected:not(.locked)').forEach(ele=>ele.classList.remove('selected'));
+    window.clearInterval(interval);
+    document.querySelectorAll('.shape_container').forEach(ele=>ele.remove());
+
+    let random_num = Math.floor(Math.random() * 7) + 1;
+    current_shape_list.shift();
+    current_shape_list.push(random_num);
+    for (let i = 0; i < 5; i++) eval(`shape_${current_shape_list[i]}(${i})`);
+    drop_function();
+
+  }
+});
 
 random_shape();
 
 
-
 drop_function();
-
 
 
 
