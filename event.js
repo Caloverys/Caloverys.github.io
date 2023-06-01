@@ -8,6 +8,7 @@ class Block{
     this.sequence = option.sequence;
     this.init_x = Math.floor((Math.random() * (col_num-this.width+1)));
     this.init_y = 0;
+    this.rotate_index = 0;
 
   }
   display(level){
@@ -82,19 +83,58 @@ update(){
 
 
 }
-left_move(){
+to_left(){
   if(check(this.init_x-1 ,this.init_y, this.structure)){
     this.init_x -=1;
     this.simulate("selected");
   }
 }
-right_move(){
+
+to_right(){
     if(check(this.init_x+1 ,this.init_y, this.structure)){
     this.init_x +=1;
     this.simulate("selected");
   }
 
 }
+to_bottom(){
+
+  for(let i =this.init_y+1; i<row_num;i++){
+    if(!check(this.init_x,i,this.structure)){
+      this.init_y = i - 1;
+      this.simulate("selected");
+      this.simulate('locked');
+      return;
+
+    }
+  }
+}
+to_rotate(){
+  let new_structure = [];
+  for(let i=0; i<this.structure[0].length;i++){
+    let subarray = [];
+    for(let j=0;j< this.structure.length;j++){
+
+      subarray.push(this.structure[j][i]);
+    }
+    new_structure.push(subarray)
+  }
+  this.structure = new_structure;
+
+  new_structure = [];
+    if(this.rotate_index > 0){
+
+    for(let i =1; i <= this.structure.length;i++){
+    new_structure[this.structure.length - i] = this.structure[i-1]
+    }
+    this.structure = new_structure;
+    this.rotate_index = 0;
+  }
+  else this.rotate_index =1;
+
+  this.simulate("selected");
+}
+
 
 }
 
@@ -110,4 +150,21 @@ function check(init_x, init_y, structure){
   return true;
 
 }
+
+document.addEventListener("keydown", event => {
+  if (event.key == " " || event.keyCode == 32) {
+    block_list[0].to_bottom();
+  }
+  else if(event.key == "a"  || event.keyCode == 97 || event.key == "ArrowLeft" || event.keyCode == 37) {
+    block_list[0].to_left();
+  }
+  else if(event.key == "d" || event.keyCode == 100 || event.key == "ArrowRight" || event.keyCode == 39){
+    block_list[0].to_right();
+  }
+  else if(event.key == "r" || event.keyCode == 82){
+    block_list[0].to_rotate();
+  }
+})
+
+
 
