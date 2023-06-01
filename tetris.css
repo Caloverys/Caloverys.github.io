@@ -1,0 +1,157 @@
+	:root{
+		--rect_border_size:2.5px;
+		--rect_sideLength: 20px;
+	}
+	body{
+		overflow: hidden;
+	}
+
+	@keyframes change_border_opacity{
+		from{
+			border:var(--rect_border_size) solid rgba(0,0,0,0.15)
+		}
+		to{
+			border:var(--rect_border_size) solid rgba(0,0,0,1)
+		}
+	}
+	@keyframes change_opacity{
+		from{
+			opacity: 0.15;
+		}
+		to{
+			opacity: 1;
+		}
+	}
+	@keyframes reverse_opacity{
+		from{
+			opacity: 1;
+		}to{
+			opacity: 0.15;
+		}
+	}
+	@keyframes reverse_border_opacity{
+		from{
+			border:var(--rect_border_size) solid rgba(0,0,0,1)
+		}
+		to{
+			border:var(--rect_border_size) solid rgba(0,0,0,0.15);
+		}
+	}
+	
+html, body {
+    width: 100%;
+}
+table{
+	border-collapse: collapse;
+  padding: 0;
+  border-spacing: 5px;
+ 
+  padding:5px;
+
+
+}
+
+tr{
+	padding:5px;
+}
+
+.border_opacity_animation{
+	animation-name:change_border_opacity;
+	animation-duration: 0.1s;
+}
+.border_opacity_animation_reverse{
+	animation-name:reverse_border_opacity;
+	animation-duration: 0.1s;
+}
+.opacity_animation{
+	animation-name:change_opacity;
+	animation-duration:0.1s;
+}
+.opacity_animation_reverse{
+	animation-name:reverse_opacity;
+	animation-duration:0.1s;
+}
+
+th{
+	border:var(--rect_border_size) solid rgba(0,0,0,0.15);
+}
+.rect{
+	 width:var(--rect_sideLength);
+  height:var(--rect_sideLength);
+
+  	border:2.5px black solid;
+
+}
+.parent{
+	  text-align:center;
+}
+.center{
+  display: flex;
+  align-content: center;
+  justify-items: center;
+}
+
+th div{
+	background-color:#000;
+	opacity:0.15;
+}
+.full_size{
+	width:100%;
+	height:100%;
+}
+.center{
+	display:flex;
+	align-content: center;
+	justify-items: center;
+}
+.small_rect{
+	background:black;
+	width:80%; 
+	height:80%;
+	padding:0px;
+	margin:auto;
+}
+
+div{
+	border-collapse: collapse;
+}
+#outer_layer{
+	border:4px black solid;
+	width: max-content;
+	margin:auto auto;
+	padding:5px;
+}
+#shape_preview{
+	position: fixed;
+	right:425px;
+	top:10%;
+	border:2px black solid;
+	width:125px;
+	height:350px;
+	display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+
+
+}
+.relative_pos{
+	position: relative;
+	height:max-content;
+}
+.selected{
+border:var(--rect_border_size) solid rgba(0,0,0,1);
+background-color:red;
+}
+.selected > *{
+	opacity: 1;
+}
+
+
+
+
+
+
+
+
+
+
