@@ -1,11 +1,9 @@
-/*let interval;
-const current_position = {
-		x:0,
-		y:0
-	}
-const current_shape_list = [];
-const shape_container = document.querySelector("#shape_preview");
 
+let interval;
+
+const current_shape_list = [];
+ const shape_container = document.querySelector("#shape_preview");
+const rects_list = [] ;
 function retrieve_dimension(name) {
   let div = document.createElement('div');
   div.id = name;
@@ -16,7 +14,7 @@ function retrieve_dimension(name) {
     height: dim.height,
     width: dim.width
   };
-}*/
+}
 const block_shape=[
   {
     sequence: 1, 
@@ -37,8 +35,12 @@ const block_shape=[
   }
 ];
 
-const shape_container = document.querySelector('#shape_preview')
+const table = document.querySelector('#main_table');
+let row_num = 24;
+let col_num = 12;
+
 //const table = document.querySelector('#main_table');
+
 
 
 
