@@ -1,10 +1,16 @@
 	:root{
-		--rect_border_size:2.5px;
+		--rect_border_size:2px;
 		--rect_sideLength: 20px;
 	}
 	body{
-		overflow: hidden;
+		overflow:hidden;
+		-webkit-user-select: none;
+-moz-user-select: nonee;
+-ms-user-select: none;
+user-select: none;
 	}
+
+	
 
 	@keyframes change_border_opacity{
 		from{
@@ -146,6 +152,14 @@ background-color:red;
 	opacity: 1;
 }
 
+.rects_preview{
+	border-style:double;
+	border-color:red !important;
+}
+.rects_preview > div{
+	opacity:0.75 !important;
+	background-color: rgba(256,0,0,0.9);
+}
 
 
 
