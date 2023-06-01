@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <head>
 <link rel="stylesheet" href="tetris.css">
-<script  src="const.js"> </script>
-<script  src="event.js"> </script>
+
+
 </head>
 <body>
 <div is="rect-container">
@@ -24,86 +24,11 @@
 	<div class='relative_pos'></div>
 </div>
 <button> Start</button>
-
+<script  src="const.js"> </script>
+<script src='set_up.js'></script>
+<script  src="event.js"> </script>
 <script>
-	let interval;
-	let current_position = {
-		x:0,
-		y:0
-	}
-	let current_shape_list = [];
 
-function retrieve_dimension(name) {
-  let div = document.createElement('div');
-  div.id = name;
-  document.body.appendChild(div);
-  let dim = div.getBoundingClientRect();
-  div.remove();
-  return {
-    height: dim.height,
-    width: dim.width
-  };
-}
-
-const table = document.querySelector('#main_table');
-let raw_num = 24;
-let col_num = 12;
-const rects_list = [];
-for (let j = 0; j < raw_num; j++) {
-  let tr = document.createElement('tr');
-  const sub_list = [];
-  for (let i = 0; i < col_num; i++) {
-    let th = document.createElement('th');
-
-    th.className = "parent rect";
-    th.innerHTML = `<div class='small_rect opacity_animation'></div>`
-    tr.appendChild(th);
-    sub_list.push(th);
-  }
-  rects_list.push(sub_list);
-  table.appendChild(tr);
-}
-
-function apply_animation() {
-  table.querySelectorAll("th").forEach((th, num) => {
-    th.querySelector("div").classList.add("opacity_animation");
-    th.classList.add("border_opacity_animation");
-    th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-    th.addEventListener("animationend", function() {
-      th.style.borderColor = "rgba(0,0,0,1)";
-      if (num === raw_num * col_num - 1) {
-        Array.from(table.querySelectorAll("th")).reverse().forEach((th, num) => {
-          th.classList.add("border_opacity_animation_reverse");
-          th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-          th.addEventListener("animationend", event => {
-            th.style.borderColor = "rgba(0,0,0,0.15)"
-          })
-
-        })
-      }
-    })
-
-    th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-    th.querySelector("div").addEventListener("animationend", event => {
-
-      event.target.style.opacity = 1;
-
-      if (num === raw_num * col_num - 1) {
-        Array.from(table.querySelectorAll("th")).reverse().forEach((th, num) => {
-          th.querySelector("div").classList.add("opacity_animation_reverse");
-          th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-          th.querySelector("div").addEventListener("animationend", event => th.querySelector("div").style.opacity = 0.15);
-
-
-        })
-      }
-
-    })
-  })
-
-}
-
-apply_animation();
 /*
 const parent_container = document.querySelector("#shape_preview");
 
@@ -261,10 +186,14 @@ function maximum_row(){
 */
 window.onload= function(){
 const block = new Block(block_shape[0]);
-block.display(1,1,0);
+block.display(0);
+apply_animation();
+interval = setInterval(()=>block.update(),100)
+interval = setInterval(()=>block.right_move(),500)
 }
 
 </script>
+
 </body>
 
 </html>
