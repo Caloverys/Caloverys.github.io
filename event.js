@@ -6,9 +6,8 @@ class Block{
     this.num = option.num;
     this.structure = option.structure;
     this.sequence = option.sequence;
-
-  }
-  drop(){
+    this.init_x = Math.floor((Math.random() * (col_num-this.width+1)));
+    this.init_y = 0;
 
   }
   display(level){
@@ -52,21 +51,63 @@ class Block{
     }
   }
 
-
-
-
- // let starting_x = (Math.random() * )
+this.simulate("selected");
 
 
 }
-fall(){
+simulate(class_name){
+  /* clear all the previous selected rects */
+  if(class_name ==='selected'){
+    document.querySelectorAll('.selected').forEach(ele=>ele.classList.remove('selected'));
+  }
+    for(let i =0; i< this.structure.length;i++){
+    for(let j =0; j< this.structure[0].length;j++){
+      if(this.structure[i][j]){
+        rects_list[this.init_y + i][this.init_x + j].classList.add(class_name)
+      }
+    }
+  }
+}
+update(){
+  if(check(this.init_x ,this.init_y + 1, this.structure)){
+    this.init_y +=1;
+    this.simulate("selected");
+  }
+  else{
+    this.simulate("locked");
+    window.clearInterval(interval);
+
+  }
+
+
+
+}
+left_move(){
+  if(check(this.init_x-1 ,this.init_y, this.structure)){
+    this.init_x -=1;
+    this.simulate("selected");
+  }
+}
+right_move(){
+    if(check(this.init_x+1 ,this.init_y, this.structure)){
+    this.init_x +=1;
+    this.simulate("selected");
+  }
 
 }
 
+}
 
+function check(init_x, init_y, structure){
 
-
-  
+  if(init_x < 0 || init_x + structure[0].length > col_num || init_y + structure.length > row_num ) return false;
+  for(let i =0; i<  structure.length;i++){
+    for(let j =0; j< structure[0].length;j++){
+      if(structure[i][j] && rects_list[init_y + i][init_x + j].classList.contains("locked"))
+        return false
+    }
+  }
+  return true;
 
 }
 
