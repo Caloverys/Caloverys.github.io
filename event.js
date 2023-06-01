@@ -53,6 +53,7 @@ class Block{
   }
 
 this.simulate("selected");
+this.to_bottom(false)
 
 
 }
@@ -64,7 +65,12 @@ simulate(class_name){
     for(let i =0; i< this.structure.length;i++){
     for(let j =0; j< this.structure[0].length;j++){
       if(this.structure[i][j]){
-        rects_list[this.init_y + i][this.init_x + j].classList.add(class_name)
+        let current_rect =  rects_list[this.init_y + i][this.init_x + j];
+        current_rect.classList.add(class_name)
+
+       if(current_rect.classList.contains("rects_preview") && class_name !== "rects_preview")
+          current_rect.classList.remove("rects_preview");
+       
       }
     }
   }
@@ -75,6 +81,7 @@ update(){
     this.simulate("selected");
   }
   else{
+    this.resetAll();
     this.simulate("locked");
     window.clearInterval(interval);
 
@@ -87,6 +94,7 @@ to_left(){
   if(check(this.init_x-1 ,this.init_y, this.structure)){
     this.init_x -=1;
     this.simulate("selected");
+    this.to_bottom(false);
   }
 }
 
@@ -94,22 +102,33 @@ to_right(){
     if(check(this.init_x+1 ,this.init_y, this.structure)){
     this.init_x +=1;
     this.simulate("selected");
+    this.to_bottom(false);
   }
 
 }
-to_bottom(){
-
+to_bottom(go_bottom){
+  const orig_y = this.init_y;
+  document.querySelectorAll('.rects_preview').forEach(ele=>ele.classList.remove("rects_preview"));
   for(let i =this.init_y+1; i<row_num;i++){
     if(!check(this.init_x,i,this.structure)){
       this.init_y = i - 1;
-      this.simulate("selected");
-      this.simulate('locked');
+
+      if(!go_bottom){
+        this.simulate("rects_preview");
+        this.init_y = orig_y;
+
+      }
+      else{
+         this.simulate("selected");
+         this.simulate('locked');
+      }
       return;
 
     }
   }
 }
 to_rotate(){
+  if(this.rotate_index < 0) return;
   let new_structure = [];
   for(let i=0; i<this.structure[0].length;i++){
     let subarray = [];
@@ -130,17 +149,24 @@ to_rotate(){
     this.structure = new_structure;
     this.rotate_index = 0;
   }
-  else this.rotate_index =1;
+  else this.rotate_index = 1;
 
   this.simulate("selected");
+   this.to_bottom(false);
+}
+resetAll(){
+   
+   this.rotate_index = -1;
 }
 
-
 }
 
+function exceed_bottom(init_y, structure){
+return init_y + structure.length > row_num;
+}
 function check(init_x, init_y, structure){
 
-  if(init_x < 0 || init_x + structure[0].length > col_num || init_y + structure.length > row_num ) return false;
+  if(init_x < 0 || init_x + structure[0].length > col_num || exceed_bottom(init_y,structure)) return false;
   for(let i =0; i<  structure.length;i++){
     for(let j =0; j< structure[0].length;j++){
       if(structure[i][j] && rects_list[init_y + i][init_x + j].classList.contains("locked"))
@@ -153,7 +179,7 @@ function check(init_x, init_y, structure){
 
 document.addEventListener("keydown", event => {
   if (event.key == " " || event.keyCode == 32) {
-    block_list[0].to_bottom();
+    block_list[0].to_bottom(true);
   }
   else if(event.key == "a"  || event.keyCode == 97 || event.key == "ArrowLeft" || event.keyCode == 37) {
     block_list[0].to_left();
