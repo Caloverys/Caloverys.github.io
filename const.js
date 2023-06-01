@@ -18,29 +18,47 @@ function retrieve_dimension(name) {
 const block_shape=[
   {
     sequence: 1, 
-
     // nums of rect on the x axis
     width:3,
-
     // num of rects on the y axis
-
     length:2,
     //the num of rects
     num:4,
     structure:[
-      [0,1,0],
-      [1,1,1]
+      [0,1,0,1],
+      [1,1,1,1]
       ]
+  }, 
+  {
+    sequence: 2, 
+    width:3,
+    length:2,
+    num:4,
+    structure:[
+      [1,0,0],
+      [1,1,1]
 
+      ]
+  }, 
+  {
+    sequence: 3, 
+    width:2,
+    length:2,
+    num:4,
+    structure:[
+      [1,1],
+      [1,1]
+      ]
   }
 ];
 
 const table = document.querySelector('#main_table');
 let row_num = 24;
 let col_num = 12;
+const  block_list = [];
+
 
 //const table = document.querySelector('#main_table');
-
 
 
 
