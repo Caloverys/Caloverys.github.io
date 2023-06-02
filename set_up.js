@@ -14,6 +14,10 @@ for (let j = 0; j < row_num; j++) {
 }
 
 function apply_animation() {
+table.querySelectorAll('th').forEach(th=>{
+  th.querySelector("div").classList.remove("opacity_animation", "opacity_animation_reverse");
+  th.classList.remove("border_opacity_animation", "border_opacity_animation_reverse")
+})
   table.querySelectorAll("th").forEach((th, num) => {
     th.querySelector("div").classList.add("opacity_animation");
     th.classList.add("border_opacity_animation");
