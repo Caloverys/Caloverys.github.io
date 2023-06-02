@@ -1,6 +1,7 @@
 
 class Block{
   constructor(option){
+    console.log(option)
     this.width = option.width;
     this.length = option.length;
     this.num = option.num;
@@ -38,7 +39,7 @@ class Block{
       if(this.structure[i][j]){
           // console.log('sjs')
          let rect = document.createElement('div');
-    rect.className = 'rect center';
+    rect.className = 'rect center black_border';
     rect.innerHTML = `<div class='small_rect'></div>`
     /*
       by setting up the child element be position absolute and the parent element be position relative, the child element is position absolute relative to the parent container now. 
@@ -52,24 +53,28 @@ class Block{
     }
   }
 
-this.simulate("selected");
-this.to_bottom(false)
+
 
 
 }
-simulate(class_name){
+simulate(class_name, is_preview){
   /* clear all the previous selected rects */
   if(class_name ==='selected'){
-    document.querySelectorAll('.selected').forEach(ele=>ele.classList.remove('selected'));
+    document.querySelectorAll('.selected').forEach(ele=>{
+      if(!ele.classList.contains("locked"))
+        ele.classList.remove('selected')
+    });
   }
     for(let i =0; i< this.structure.length;i++){
     for(let j =0; j< this.structure[0].length;j++){
       if(this.structure[i][j]){
         let current_rect =  rects_list[this.init_y + i][this.init_x + j];
-        current_rect.classList.add(class_name)
 
-       if(current_rect.classList.contains("rects_preview") && class_name !== "rects_preview")
+       if(current_rect.classList.contains("rects_preview") && !is_preview){
           current_rect.classList.remove("rects_preview");
+          //debugger
+       }
+        current_rect.classList.add(class_name)
        
       }
     }
@@ -81,9 +86,8 @@ update(){
     this.simulate("selected");
   }
   else{
+    this.simulate('locked');
     this.resetAll();
-    this.simulate("locked");
-    window.clearInterval(interval);
 
   }
 
@@ -109,18 +113,19 @@ to_right(){
 to_bottom(go_bottom){
   const orig_y = this.init_y;
   document.querySelectorAll('.rects_preview').forEach(ele=>ele.classList.remove("rects_preview"));
-  for(let i =this.init_y+1; i<row_num;i++){
+  for(let i =this.init_y; i<=row_num;i++){
+          console.log(exceed_bottom(i +1,this.structure),i+1,this.structure.length,row_num);
     if(!check(this.init_x,i,this.structure)){
       this.init_y = i - 1;
-
       if(!go_bottom){
-        this.simulate("rects_preview");
+        this.simulate("rects_preview",true);
         this.init_y = orig_y;
 
       }
       else{
          this.simulate("selected");
          this.simulate('locked');
+         this.resetAll();
       }
       return;
 
@@ -150,13 +155,22 @@ to_rotate(){
     this.rotate_index = 0;
   }
   else this.rotate_index = 1;
-
+     this.to_bottom(false);
   this.simulate("selected");
-   this.to_bottom(false);
+
 }
 resetAll(){
-   
    this.rotate_index = -1;
+   window.clearInterval(interval);
+   block_list.shift();
+   console.log(block_list)
+   block_list.push(new Block(block_shape[Math.floor(Math.random() * 6)]) );
+   document.querySelectorAll(".shape_container").forEach(ele=>ele.remove());
+   for(let i=0; i< block_list.length;i++) block_list[i].display(i);
+  block_list[0].simulate("selected")
+  block_list[0].to_bottom(false);
+  interval = setInterval(()=>block_list[0].update(),200)
+
 }
 
 }
@@ -167,6 +181,7 @@ return init_y + structure.length > row_num;
 function check(init_x, init_y, structure){
 
   if(init_x < 0 || init_x + structure[0].length > col_num || exceed_bottom(init_y,structure)) return false;
+
   for(let i =0; i<  structure.length;i++){
     for(let j =0; j< structure[0].length;j++){
       if(structure[i][j] && rects_list[init_y + i][init_x + j].classList.contains("locked"))
@@ -178,19 +193,19 @@ function check(init_x, init_y, structure){
 }
 
 document.addEventListener("keydown", event => {
+
   if (event.key == " " || event.keyCode == 32) {
     block_list[0].to_bottom(true);
   }
-  else if(event.key == "a"  || event.keyCode == 97 || event.key == "ArrowLeft" || event.keyCode == 37) {
+  else if(event.key == "A"  || event.keyCode == 97 || event.key == "ArrowLeft" || event.keyCode == 37) {
     block_list[0].to_left();
   }
-  else if(event.key == "d" || event.keyCode == 100 || event.key == "ArrowRight" || event.keyCode == 39){
+  else if(event.key == "D" || event.keyCode == 100 || event.key == "ArrowRight" || event.keyCode == 39){
     block_list[0].to_right();
   }
-  else if(event.key == "r" || event.keyCode == 82){
+  else if(event.key == "R" || event.keyCode == 82){
     block_list[0].to_rotate();
   }
 })
-
 
 
