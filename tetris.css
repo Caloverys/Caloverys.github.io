@@ -14,10 +14,10 @@ user-select: none;
 
 	@keyframes change_border_opacity{
 		from{
-			border:var(--rect_border_size) solid rgba(0,0,0,0.15)
+			border:var(--rect_border_size) solid rgba(0,0,0,0.15) ;
 		}
 		to{
-			border:var(--rect_border_size) solid rgba(0,0,0,1)
+			border:var(--rect_border_size) solid rgba(0,0,0,1);
 		}
 	}
 	@keyframes change_opacity{
@@ -37,10 +37,10 @@ user-select: none;
 	}
 	@keyframes reverse_border_opacity{
 		from{
-			border:var(--rect_border_size) solid rgba(0,0,0,1)
+			border:var(--rect_border_size) solid rgba(0,0,0,1) ;
 		}
 		to{
-			border:var(--rect_border_size) solid rgba(0,0,0,0.15);
+			border:var(--rect_border_size) solid rgba(0,0,0,0.15) ;
 		}
 	}
 	
@@ -84,9 +84,6 @@ th{
 .rect{
 	 width:var(--rect_sideLength);
   height:var(--rect_sideLength);
-
-  	border:2.5px black solid;
-
 }
 .parent{
 	  text-align:center;
@@ -151,7 +148,9 @@ background-color:red;
 .selected > *{
 	opacity: 1;
 }
-
+.black_border{
+	border:var(--rect_border_size) black solid;
+}
 .rects_preview{
 	border-style:double;
 	border-color:red !important;
@@ -160,7 +159,6 @@ background-color:red;
 	opacity:0.75 !important;
 	background-color: rgba(256,0,0,0.9);
 }
-
 
 
 
