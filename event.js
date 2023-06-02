@@ -209,6 +209,7 @@ document.addEventListener("keydown", event => {
 
   if (event.key == " " || event.keyCode == 32) {
     block_list[0].to_bottom(true);
+    shaking_effect();
   }
   else if(event.key == "A"  || event.keyCode == 97 || event.key == "ArrowLeft" || event.keyCode == 37) {
     block_list[0].to_left();
@@ -221,4 +222,10 @@ document.addEventListener("keydown", event => {
   }
 })
 
+function shaking_effect(){
+  table.classList.add("shaking_effect");
+  table.addEventListener("animationend",function(){
+    table.classList.remove("shaking_effect")
+  })
+}
 
