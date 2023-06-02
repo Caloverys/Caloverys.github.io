@@ -15,7 +15,6 @@ for (let j = 0; j < row_num; j++) {
 
 function apply_animation() {
   table.querySelectorAll("th").forEach((th, num) => {
-    console.log(th)
     th.querySelector("div").classList.add("opacity_animation");
     th.classList.add("border_opacity_animation");
     th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
