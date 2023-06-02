@@ -25,9 +25,9 @@ const block_shape=[
     //the num of rects
     num:4,
     structure:[
-      [0,1,0,1],
-      [1,1,1,1]
-      ]
+      [0,1,0],
+      [1,1,1]
+      ],
   }, 
   {
     sequence: 2, 
@@ -37,7 +37,6 @@ const block_shape=[
     structure:[
       [1,0,0],
       [1,1,1]
-
       ]
   }, 
   {
@@ -49,17 +48,46 @@ const block_shape=[
       [1,1],
       [1,1]
       ]
+  }, 
+  {
+    sequence: 4, 
+    width:3,
+    length:2,
+    num:4,
+    structure:[
+      [0,0,1],
+      [1,1,1]
+      ]
+  },
+  {
+    sequence: 5, 
+    width:3,
+    length:2,
+    num:4,
+    structure:[
+      [1,1,0],
+      [0,1,1]
+      ]
+  },
+  {
+    sequence: 6, 
+    width:4,
+    length:1,
+    num:4,
+    structure:[
+      [1,1,1,1]
+      ]
   }
 ];
 
 const table = document.querySelector('#main_table');
 let row_num = 24;
 let col_num = 12;
+let preview_num = 5;
 const  block_list = [];
 
 
 //const table = document.querySelector('#main_table');
-
 
 
 
