@@ -11,11 +11,12 @@ class Block{
     this.rotate_index = 0;
 
   }
-  display(level){
+  display(id, level){
 
     let div= document.createElement("div");
     div.id = `shape_${this.sequence}`;
     div.className = 'shape_container';
+    const shape_container = document.querySelector(`#${id}`);
 
   shape_container.appendChild(div);
   let border_size = parseFloat(window.getComputedStyle(document.body).getPropertyValue("--rect_border_size"));
@@ -26,10 +27,15 @@ class Block{
     function init_pos(width,length,level){
       let container_width = parseFloat(window.getComputedStyle(shape_container).getPropertyValue("width"));
       let container_height = parseFloat(window.getComputedStyle(shape_container).getPropertyValue("height"));
-
+      if(level === -1){
+         return {
+    x: (container_width - width * (rect_sideLength + border_size)) / 2,
+    y: (container_height  - length * (rect_sideLength + border_size)) / 2
+  }
+      }
       return {
     x: (container_width - width * (rect_sideLength + border_size)) / 2,
-    y: (container_height * level / 5 + (container_height / 5 - length * (rect_sideLength + border_size)) / 2)
+    y: (container_height * level / 4 + (container_height / 4 - length * (rect_sideLength + border_size)) / 2)
   }
     }
   for(let i =0; i< this.length; i++){
@@ -62,16 +68,25 @@ simulate(class_name, is_preview){
       if(!ele.classList.contains("locked"))
         ele.classList.remove('selected')
     });
+  };
+  if(this.init_y <0){
+    window.clearInterval(interval);
+    apply_animation();
+    has_started = false;
+  //  document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"))
+    return;
   }
     for(let i =0; i< this.structure.length;i++){
     for(let j =0; j< this.structure[0].length;j++){
       if(this.structure[i][j]){
+
         let current_rect =  rects_list[this.init_y + i][this.init_x + j];
 
        if(current_rect.classList.contains("rects_preview") && !is_preview)
           current_rect.classList.remove("rects_preview");
        
-        current_rect.classList.add(class_name)
+        current_rect.classList.add(class_name);
+
        
       }
     }
@@ -92,7 +107,6 @@ row_check(){
     }
 
   });
- // simulate()
 }
 update(){
   if(check(this.init_x ,this.init_y + 1, this.structure)){
@@ -100,6 +114,11 @@ update(){
     this.simulate("selected");
   }
   else{
+     if(this.init_y <0){
+          window.clearInterval(interval);
+          apply_animation();
+          return;
+        };
     this.simulate('locked');
     this.row_check();
     this.resetAll();
@@ -136,6 +155,13 @@ to_bottom(go_bottom){
 
       }
       else{
+       if(this.init_y <0){
+          window.clearInterval(interval);
+          apply_animation();
+          return;
+
+        }
+
          this.simulate("selected");
          this.simulate('locked');
          this.row_check();
@@ -174,14 +200,33 @@ to_rotate(){
 
 }
 resetAll(){
+
+  if(!has_started) return
    this.rotate_index = -1;
    window.clearInterval(interval);
+
    block_list.shift();
    block_list.push(new Block(block_shape[Math.floor(Math.random() * 6)]) );
    document.querySelectorAll(".shape_container").forEach(ele=>ele.remove());
-   for(let i=0; i< block_list.length;i++) block_list[i].display(i);
+   for(let i=0; i< block_list.length;i++){
+     if(i===0) block_list[i].display("current_shape_preview",-1);
+    else block_list[i].display("shape_preview",i-1);
+
+
+   } 
   block_list[0].simulate("selected")
   block_list[0].to_bottom(false);
+
+
+
+  /* why can't be removed?
+
+
+
+
+
+  */
+  //if(!interval)
   interval = setInterval(()=>block_list[0].update(),200)
 
 }
@@ -206,20 +251,21 @@ function check(init_x, init_y, structure){
 }
 
 document.addEventListener("keydown", event => {
-
+if(has_started){
   if (event.key == " " || event.keyCode == 32) {
     block_list[0].to_bottom(true);
     shaking_effect();
   }
-  else if(event.key == "A"  || event.keyCode == 97 || event.key == "ArrowLeft" || event.keyCode == 37) {
+  else if(event.key.toLowerCase() == "a"  || event.keyCode == 97 || event.key == "ArrowLeft" || event.keyCode == 37) {
     block_list[0].to_left();
   }
-  else if(event.key == "D" || event.keyCode == 100 || event.key == "ArrowRight" || event.keyCode == 39){
+  else if(event.key.toLowerCase() == "d" || event.keyCode == 100 || event.key == "ArrowRight" || event.keyCode == 39){
     block_list[0].to_right();
   }
-  else if(event.key == "R" || event.keyCode == 82){
+  else if(event.key.toLowerCase() == "r" || event.keyCode == 82){
     block_list[0].to_rotate();
   }
+}
 })
 
 function shaking_effect(){
@@ -228,4 +274,3 @@ function shaking_effect(){
     table.classList.remove("shaking_effect")
   })
 }
-
