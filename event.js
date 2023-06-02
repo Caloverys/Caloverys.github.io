@@ -1,8 +1,7 @@
 
 class Block{
   constructor(option){
-    console.log(option)
-    this.width = option.width;
+      this.width = option.width;
     this.length = option.length;
     this.num = option.num;
     this.structure = option.structure;
@@ -70,15 +69,31 @@ simulate(class_name, is_preview){
       if(this.structure[i][j]){
         let current_rect =  rects_list[this.init_y + i][this.init_x + j];
 
-       if(current_rect.classList.contains("rects_preview") && !is_preview){
+       if(current_rect.classList.contains("rects_preview") && !is_preview)
           current_rect.classList.remove("rects_preview");
-          //debugger
-       }
+       
         current_rect.classList.add(class_name)
        
       }
     }
   }
+}
+row_check(){
+  rects_list.forEach((arr,index) =>{
+    if(arr.some(ele => !ele.classList.contains("locked")) === false){
+      arr.forEach(ele=> ele.classList.remove("locked", "selected"));
+      for(let i = index-1; i>0;i--){
+        for(let j=0; j< arr.length;j++){
+          if(rects_list[i][j].classList.contains("locked")){
+            rects_list[i][j].classList.remove("locked","selected")
+            rects_list[i+1][j].classList.add('locked',"selected");
+          }
+        }
+      }
+    }
+
+  });
+ // simulate()
 }
 update(){
   if(check(this.init_x ,this.init_y + 1, this.structure)){
@@ -87,11 +102,10 @@ update(){
   }
   else{
     this.simulate('locked');
+    this.row_check();
     this.resetAll();
 
   }
-
-
 
 }
 to_left(){
@@ -107,6 +121,10 @@ to_right(){
     this.init_x +=1;
     this.simulate("selected");
     this.to_bottom(false);
+    console.log('it works')
+  }else{
+    console.log(this.init_x+1,this.init_y, this.structure)
+    debugger
   }
 
 }
@@ -114,7 +132,7 @@ to_bottom(go_bottom){
   const orig_y = this.init_y;
   document.querySelectorAll('.rects_preview').forEach(ele=>ele.classList.remove("rects_preview"));
   for(let i =this.init_y; i<=row_num;i++){
-          console.log(exceed_bottom(i +1,this.structure),i+1,this.structure.length,row_num);
+          
     if(!check(this.init_x,i,this.structure)){
       this.init_y = i - 1;
       if(!go_bottom){
@@ -125,6 +143,7 @@ to_bottom(go_bottom){
       else{
          this.simulate("selected");
          this.simulate('locked');
+         this.row_check();
          this.resetAll();
       }
       return;
@@ -163,7 +182,6 @@ resetAll(){
    this.rotate_index = -1;
    window.clearInterval(interval);
    block_list.shift();
-   console.log(block_list)
    block_list.push(new Block(block_shape[Math.floor(Math.random() * 6)]) );
    document.querySelectorAll(".shape_container").forEach(ele=>ele.remove());
    for(let i=0; i< block_list.length;i++) block_list[i].display(i);
@@ -182,9 +200,9 @@ function check(init_x, init_y, structure){
 
   if(init_x < 0 || init_x + structure[0].length > col_num || exceed_bottom(init_y,structure)) return false;
 
-  for(let i =0; i<  structure.length;i++){
+  for(let i =0; i<structure.length;i++){
     for(let j =0; j< structure[0].length;j++){
-      if(structure[i][j] && rects_list[init_y + i][init_x + j].classList.contains("locked"))
+      if(structure[i][j] === 1 && rects_list[init_y + i][init_x + j].classList.contains("locked"))
         return false
     }
   }
