@@ -36,7 +36,6 @@ class Block{
     for(let j = 0; j< this.width;j++){
       //zero is false and one is true
       if(this.structure[i][j]){
-          // console.log('sjs')
          let rect = document.createElement('div');
     rect.className = 'rect center black_border';
     rect.innerHTML = `<div class='small_rect'></div>`
@@ -121,10 +120,6 @@ to_right(){
     this.init_x +=1;
     this.simulate("selected");
     this.to_bottom(false);
-    console.log('it works')
-  }else{
-    console.log(this.init_x+1,this.init_y, this.structure)
-    debugger
   }
 
 }
