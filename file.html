@@ -33,16 +33,17 @@
 window.onload= function(){
 for(let i =0; i<preview_num;i++){
   let block = new Block(block_shape[Math.floor(Math.random() * 6)]);
-  //let block = new Block(block_shape[5]);
   block_list.push(block);
   block.display(i);
 
 }
-  block_list[0].simulate("selected")
-  block_list[0].to_bottom(false);
 apply_animation();
-interval = setInterval(()=>block_list[0].update(),500)
 }
+document.querySelector("button").addEventListener("click", function(){
+   block_list[0].simulate("selected");
+     block_list[0].to_bottom(false);
+  interval = setInterval(()=>block_list[0].update(),500)
+})
 
 </script>
 
