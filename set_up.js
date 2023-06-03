@@ -39,17 +39,26 @@ table.querySelectorAll('th').forEach(th=>{
     th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
     th.querySelector("div").addEventListener("animationend", event => {
 
-      event.target.style.opacity = 1;
+      event.target.classList.add("default_opacity")
 
       if (num === row_num * col_num - 1) {
         Array.from(table.querySelectorAll("th")).reverse().forEach((th, num) => {
           th.querySelector("div").classList.add("opacity_animation_reverse");
           th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
-          th.querySelector("div").addEventListener("animationend", event => th.querySelector("div").style.opacity = 0.15);
-
+          th.querySelector("div").addEventListener("animationend", event =>{
+            event.target.classList.remove("default_opacity")
+            th.querySelector("div").classList.add("low_opacity");
+            if(num ===  Array.from(table.querySelectorAll("th")).length -1){
+              document.querySelectorAll(".border_opacity_animation").forEach(ele=>{
+                ele.classList.remove('border_opacity_animation', "border_opacity_animation_reverse");
+                ele.querySelector('div').classList.remove("opacity_animation", "opacity_animation_reverse")
+              })
+            }
+          })
 
         })
       }
+    
 
     })
   })
