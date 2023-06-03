@@ -19,9 +19,8 @@
 </table>
 </div>
 
-
+<div id='current_shape_preview'> </div>
 <div id='shape_preview'>
-	<div class='relative_pos'></div>
 </div>
 <button> Start</button>
 <script  src="const.js"> </script>
@@ -34,15 +33,18 @@ window.onload= function(){
 for(let i =0; i<preview_num;i++){
   let block = new Block(block_shape[Math.floor(Math.random() * 6)]);
   block_list.push(block);
-  block.display(i);
+  if(i===0) block.display("current_shape_preview",-1);
+  	else block.display("shape_preview",i-1);
 
 }
 apply_animation();
 }
+
 document.querySelector("button").addEventListener("click", function(){
+	has_started = true;
    block_list[0].simulate("selected");
      block_list[0].to_bottom(false);
-  interval = setInterval(()=>block_list[0].update(),500)
+  interval = setInterval(()=>block_list[0].update(),200)
 })
 
 </script>
