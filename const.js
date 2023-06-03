@@ -1,4 +1,3 @@
-
 let interval;
 let has_started = false;
 const current_shape_list = [];
@@ -182,6 +181,5 @@ const  block_list = [];
 
 
 //const table = document.querySelector('#main_table');
-
 
 
