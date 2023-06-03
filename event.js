@@ -104,7 +104,10 @@ row_check(){
 update(){
  //   times +=1;
   //console.log("times +" + times, this.structure)
-  if(!check_first_row()) return;
+  if(!check_first_row()) {
+    this.simulate("red_border", false)
+    return;
+  }
   if(check(this.init_x ,this.init_y + 1, this.structure)){
     this.init_y +=1;
     this.simulate("selected");
@@ -133,7 +136,10 @@ to_right(){
 
 }
 to_bottom(go_bottom){
-   if(!check_first_row()) return;
+   if(!check_first_row()) {
+    this.simulate("red_border", false)
+    return;
+  }
   const orig_y = this.init_y;
   document.querySelectorAll('.rects_preview').forEach(ele=>ele.classList.remove("rects_preview"));
   for(let i =this.init_y; i<=row_num;i++){
@@ -212,6 +218,7 @@ resetAll(){
 function check_first_row(){
   if(rects_list[0].some(ele=>ele.classList.contains("locked"))){
 
+
     apply_animation();
     document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"));
     window.clearInterval(interval)
@@ -262,3 +269,17 @@ function shaking_effect(){
     table.classList.remove("shaking_effect")
   })
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
