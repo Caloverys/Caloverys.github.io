@@ -1,4 +1,4 @@
-
+let times = 0;
 class Block{
   constructor(option){
       this.width = option.width;
@@ -69,13 +69,6 @@ simulate(class_name, is_preview){
         ele.classList.remove('selected')
     });
   };
-  if(this.init_y <0){
-    window.clearInterval(interval);
-    apply_animation();
-    has_started = false;
-  //  document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"))
-    return;
-  }
     for(let i =0; i< this.structure.length;i++){
     for(let j =0; j< this.structure[0].length;j++){
       if(this.structure[i][j]){
@@ -109,20 +102,17 @@ row_check(){
   });
 }
 update(){
+ //   times +=1;
+  //console.log("times +" + times, this.structure)
+  if(!check_first_row()) return;
   if(check(this.init_x ,this.init_y + 1, this.structure)){
     this.init_y +=1;
     this.simulate("selected");
   }
   else{
-     if(this.init_y <0){
-          window.clearInterval(interval);
-          apply_animation();
-          return;
-        };
     this.simulate('locked');
     this.row_check();
     this.resetAll();
-
   }
 
 }
@@ -143,6 +133,7 @@ to_right(){
 
 }
 to_bottom(go_bottom){
+   if(!check_first_row()) return;
   const orig_y = this.init_y;
   document.querySelectorAll('.rects_preview').forEach(ele=>ele.classList.remove("rects_preview"));
   for(let i =this.init_y; i<=row_num;i++){
@@ -155,13 +146,6 @@ to_bottom(go_bottom){
 
       }
       else{
-       if(this.init_y <0){
-          window.clearInterval(interval);
-          apply_animation();
-          return;
-
-        }
-
          this.simulate("selected");
          this.simulate('locked');
          this.row_check();
@@ -199,9 +183,9 @@ to_rotate(){
   this.simulate("selected");
 
 }
+
 resetAll(){
 
-  if(!has_started) return
    this.rotate_index = -1;
    window.clearInterval(interval);
 
@@ -214,25 +198,29 @@ resetAll(){
 
 
    } 
-  block_list[0].simulate("selected")
+
+  block_list[0].simulate("selected");
   block_list[0].to_bottom(false);
+  interval = setInterval(()=>block_list[0].update(),500)
 
 
 
-  /* why can't be removed?
-
-
-
-
-
-  */
-  //if(!interval)
-  interval = setInterval(()=>block_list[0].update(),200)
 
 }
 
 }
+function check_first_row(){
+  if(rects_list[0].some(ele=>ele.classList.contains("locked"))){
 
+    apply_animation();
+    document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"));
+    window.clearInterval(interval)
+    return false;
+
+  }
+  return true;
+
+}
 function exceed_bottom(init_y, structure){
 return init_y + structure.length > row_num;
 }
@@ -251,7 +239,7 @@ function check(init_x, init_y, structure){
 }
 
 document.addEventListener("keydown", event => {
-if(has_started){
+if(has_started || check_first_row()){
   if (event.key == " " || event.keyCode == 32) {
     block_list[0].to_bottom(true);
     shaking_effect();
