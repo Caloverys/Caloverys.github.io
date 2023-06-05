@@ -172,6 +172,14 @@ div{
 
 }
 
+.low_border_color{
+	border-color:rgba(0,0,0,0.15)
+
+}
+.high_border_color{
+	border-color:rgba(0,0,0,1);
+
+}
 
 .shaking_effect {
   animation: shake 0.25s linear;
@@ -214,6 +222,5 @@ div{
     transform: translate(0.5px, -1px) rotate(-0.5deg);
   }
 }
-
 
 
