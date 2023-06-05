@@ -72,6 +72,12 @@ simulate(class_name, is_preview){
     for(let i =0; i< this.structure.length;i++){
     for(let j =0; j< this.structure[0].length;j++){
       if(this.structure[i][j]){
+        //prevent the rects exceeding the top of the row
+        if(this.init_y + i < 0) {
+          console.log
+                 // debugger
+          break;
+        }
 
         let current_rect =  rects_list[this.init_y + i][this.init_x + j];
 
@@ -102,10 +108,13 @@ row_check(){
   });
 }
 update(){
- //   times +=1;
-  //console.log("times +" + times, this.structure)
   if(!check_first_row()) {
-    this.simulate("red_border", false)
+      window.clearInterval(interval)
+        console.log('update');
+            document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"));
+         apply_animation();
+//    this.simulate("red_border", false);
+  
     return;
   }
   if(check(this.init_x ,this.init_y + 1, this.structure)){
@@ -136,8 +145,15 @@ to_right(){
 
 }
 to_bottom(go_bottom){
+    //console.log('to_bottom')
    if(!check_first_row()) {
-    this.simulate("red_border", false)
+     window.clearInterval(interval)
+        console.log('tobottom');
+         document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"));
+        // apply_animation();
+  //  this.simulate("red_border", false);
+  
+    
     return;
   }
   const orig_y = this.init_y;
@@ -192,8 +208,20 @@ to_rotate(){
 
 resetAll(){
 
+     if(!check_first_row()) {
+        window.clearInterval(interval)
+        console.log('resetAll');
+          document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"));
+         apply_animation();
+   // this.simulate("red_border", false);
+  
+    return;
+  }
+
+console.log('fuck ')
    this.rotate_index = -1;
-   window.clearInterval(interval);
+    window.clearInterval(interval);
+  
 
    block_list.shift();
    block_list.push(new Block(block_shape[Math.floor(Math.random() * 6)]) );
@@ -207,7 +235,7 @@ resetAll(){
 
   block_list[0].simulate("selected");
   block_list[0].to_bottom(false);
-  interval = setInterval(()=>block_list[0].update(),500)
+  interval = setInterval(()=>block_list[0].update(),200)
 
 
 
@@ -216,12 +244,12 @@ resetAll(){
 
 }
 function check_first_row(){
+
   if(rects_list[0].some(ele=>ele.classList.contains("locked"))){
 
+   
 
-    apply_animation();
-    document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"));
-    window.clearInterval(interval)
+
     return false;
 
   }
@@ -246,7 +274,8 @@ function check(init_x, init_y, structure){
 }
 
 document.addEventListener("keydown", event => {
-if(has_started || check_first_row()){
+//console.|| check_first_row()
+if(has_started ){
   if (event.key == " " || event.keyCode == 32) {
     block_list[0].to_bottom(true);
     shaking_effect();
@@ -269,7 +298,6 @@ function shaking_effect(){
     table.classList.remove("shaking_effect")
   })
 }
-
 
 
 
