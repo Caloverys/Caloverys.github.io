@@ -5,7 +5,7 @@ for (let j = 0; j < row_num; j++) {
     let th = document.createElement('th');
 
     th.className = "parent rect";
-    th.innerHTML = `<div class='small_rect opacity_animation'></div>`
+    th.innerHTML = `<div class='small_rect'></div>`
     tr.appendChild(th);
     sub_list.push(th);
   }
@@ -14,39 +14,58 @@ for (let j = 0; j < row_num; j++) {
 }
 
 function apply_animation() {
+  //debugger
 table.querySelectorAll('th').forEach(th=>{
-  th.querySelector("div").classList.remove("opacity_animation", "opacity_animation_reverse");
-  th.classList.remove("border_opacity_animation", "border_opacity_animation_reverse")
+ // th.querySelector("div").style.animationDelay = "0s"
+  //th.querySelector("div").style.animationDelay = '0s'
+  //th.querySelector("div").classList.remove("opacity_animation", "opacity_animation_reverse","low_opacity");
+  //th.classList.remove("border_opacity_animation", "border_opacity_animation_reverse","low_border_color")
 })
   table.querySelectorAll("th").forEach((th, num) => {
+    //console.log(num, row_num * col_num-1)
     th.querySelector("div").classList.add("opacity_animation");
     th.classList.add("border_opacity_animation");
-    th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
+    console.log(Math.floor(num/col_num)/20)
+    th.style.animationDelay = `${Math.floor(num/col_num)/20 + 0.05}s`;
+   // th.classList.add("high_border_color");
     th.addEventListener("animationend", function() {
-      th.style.borderColor = "rgba(0,0,0,1)";
+    th.classList.add("high_border_color");
+
+      console.log("oh yees", num)
+
       if (num === row_num * col_num - 1) {
+        //debugger
+        console.log("shit")
         Array.from(table.querySelectorAll("th")).reverse().forEach((th, num) => {
           th.classList.add("border_opacity_animation_reverse");
-          th.style.animationDelay = `${Math.floor(num/col_num)/20}s`;
+          th.style.animationDelay = `${Math.floor(num/col_num)/20 +0.05}s`;
           th.addEventListener("animationend", event => {
-            th.style.borderColor = "rgba(0,0,0,0.15)"
+            th.classList.remove("high_border_color")
+            th.classList.add('low_border_color')
           })
 
         })
       }
     })
-
-    th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
+    //if(has_started) 
+    //debugger
+    if (num === row_num * col_num - 1){
+      console.log("yes")
+      console.log(table.querySelectorAll("th"))
+    }
+    th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20 + 0.05}s`;
     th.querySelector("div").addEventListener("animationend", event => {
 
       event.target.classList.add("default_opacity")
 
       if (num === row_num * col_num - 1) {
+         console.log('whu')
         Array.from(table.querySelectorAll("th")).reverse().forEach((th, num) => {
           th.querySelector("div").classList.add("opacity_animation_reverse");
-          th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
+          th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20+0.05}s`;
           th.querySelector("div").addEventListener("animationend", event =>{
             event.target.classList.remove("default_opacity")
+
             th.querySelector("div").classList.add("low_opacity");
             if(num ===  Array.from(table.querySelectorAll("th")).length -1){
               document.querySelectorAll(".border_opacity_animation").forEach(ele=>{
