@@ -171,14 +171,15 @@ to_rotate(){
     }
     new_structure.push(subarray)
   }
+  if(!check(this.init_x, this.init_y, new_structure)) return;
   this.structure = new_structure;
 
   new_structure = [];
     if(this.rotate_index > 0){
-
     for(let i =1; i <= this.structure.length;i++){
     new_structure[this.structure.length - i] = this.structure[i-1]
     }
+    if(!check(this.init_x, this.init_y, new_structure)) return;
     this.structure = new_structure;
     this.rotate_index = 0;
   }
