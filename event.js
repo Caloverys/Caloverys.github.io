@@ -83,7 +83,7 @@ simulate(class_name, is_preview){
        
       }
       if(class_name === "red_theme" && i === this.structure.length - 1){
-          if(rects_list[this.init_y + i + 1][this.init_x+j].classList.contains("lockd"))
+          if(rects_list[this.init_y + i + 1][this.init_x+j].classList.contains("locked"))
           rects_list[this.init_y + i + 1][this.init_x+j].classList.add('red_theme_outline')
         }
     }
@@ -190,7 +190,6 @@ to_rotate(){
 }
 
 resetAll(){
-
      if(!check_first_row(this)) return;
 
    this.rotate_index = -1;
@@ -209,7 +208,7 @@ resetAll(){
 
   block_list[0].simulate("selected");
   block_list[0].to_bottom(false);
-  interval = setInterval(()=>block_list[0].update(),200)
+  interval = setInterval(()=>block_list[0].update(),drop_speed)
 
 
 
@@ -222,7 +221,8 @@ function check_first_row(element){
      window.clearInterval(interval)
 
    element.simulate("red_theme");
-      setTimeout(()=>{apply_animation()},1500)
+
+    setTimeout(()=>{apply_animation()},1500)
 
      return false;
   }
@@ -248,7 +248,7 @@ function check(init_x, init_y, structure){
 }
 
 document.addEventListener("keydown", event => {
-if(has_started ){
+if(has_started){
   if (event.key == " " || event.keyCode == 32) {
     block_list[0].to_bottom(true);
     shaking_effect();
@@ -262,7 +262,20 @@ if(has_started ){
   else if(event.key.toLowerCase() == "r" || event.keyCode == 82){
     block_list[0].to_rotate();
   }
+  else if(event.key.toLowerCase() == "s" || event.keyCode == 83 || event.key == "ArrowDown" || event.keyCode == 40){
+    window.clearInterval(interval);
+    drop_speed = 20;
+    interval = setInterval(()=>block_list[0].update(),drop_speed)
+  }
 }
+});
+document.addEventListener("keyup", event =>{
+  if(event.key.toLowerCase() == "s" || event.keyCode == 83 || event.key == "ArrowDown" || event.keyCode == 40){
+    window.clearInterval(interval);
+    drop_speed = 200;
+    interval = setInterval(()=>block_list[0].update(),drop_speed)
+  }
+
 })
 
 function shaking_effect(){
