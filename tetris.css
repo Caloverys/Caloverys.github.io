@@ -207,14 +207,30 @@ content: "\a0";
 display: block;
 width: calc(var(--rect_sideLength) + 2 * var(--rect_border_size));
 height: calc(var(--rect_sideLength) + 2 * var(--rect_border_size));
-box-shadow: var(--rect_border_size) 0 0 black;
+box-shadow: var(--rect_border_size) 0 0 black, 0 -2px 0 inset;
 position: relative;
-margin-bottom: calc(-1 * var(--rect_sideLength) - 2 * var(--rect_border_size));
+padding-bottom: 2px;
+margin-bottom: calc(-1 * var(--rect_sideLength) - 3* var(--rect_border_size));
 margin-right: calc(-2 * var(--rect_border_size));
 top: calc(-2 * var(--rect_border_size));;
 left: calc(-1.5 * var(--rect_border_size));
 
 }
+
+.red_theme_outline:after {
+content: "\a0";
+display: block;
+width: calc(var(--rect_sideLength) + 2 * var(--rect_border_size));
+height: calc(var(--rect_sideLength) + 2 * var(--rect_border_size));
+box-shadow: var(--rect_border_size) 0 0 black;
+position: relative;
+margin-bottom: calc(-1 * var(--rect_sideLength) - 2 * var(--rect_border_size));
+margin-right: calc(-2 * var(--rect_border_size));
+top: calc(-1 * var(--rect_sideLength));;
+left: calc(-1.5 * var(--rect_border_size) - var(--rect_sideLength) - 2 * var(--rect_border_size));
+
+}
+
 
 @keyframes shake {
   0% {
