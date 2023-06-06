@@ -1,6 +1,7 @@
 	:root{
 		--rect_border_size:2px;
 		--rect_sideLength: 20px;
+		--reach_top_color:#ac0909;
 	}
 	body{
 		overflow:hidden;
@@ -184,9 +185,37 @@ div{
 .shaking_effect {
   animation: shake 0.25s linear;
 }
-.red_border{
-	border-color:#560000;
+.red_theme{
+
+	outline-color:var(--reach_top_color) !important;
 }
+.red_theme > div{
+	background-color:var(--reach_top_color) !important;
+}
+.red_theme_outline{
+	/* 
+	outline color will not work for top side only so box shadow is the best option here
+
+
+	*/
+
+		outline:initial !important;
+
+}
+.red_theme_outline:before {
+content: "\a0";
+display: block;
+width: calc(var(--rect_sideLength) + 2 * var(--rect_border_size));
+height: calc(var(--rect_sideLength) + 2 * var(--rect_border_size));
+box-shadow: var(--rect_border_size) 0 0 black;
+position: relative;
+margin-bottom: calc(-1 * var(--rect_sideLength) - 2 * var(--rect_border_size));
+margin-right: calc(-2 * var(--rect_border_size));
+top: calc(-2 * var(--rect_border_size));;
+left: calc(-1.5 * var(--rect_border_size));
+
+}
+
 @keyframes shake {
   0% {
     transform: translate(0.5px, 0.5px) rotate(0deg);
@@ -222,5 +251,4 @@ div{
     transform: translate(0.5px, -1px) rotate(-0.5deg);
   }
 }
-
 
