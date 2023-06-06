@@ -3,9 +3,10 @@ for (let j = 0; j < row_num; j++) {
   const sub_list = [];
   for (let i = 0; i < col_num; i++) {
     let th = document.createElement('th');
+    th.id = `th_${i + col_num*j}`
 
     th.className = "parent rect";
-    th.innerHTML = `<div class='small_rect'></div>`
+    th.innerHTML = `<div  class='small_rect'></div>`
     tr.appendChild(th);
     sub_list.push(th);
   }
@@ -60,7 +61,11 @@ th.querySelector("div").addEventListener("animationend", event => {
             event.target.classList.remove("default_opacity")
 
             th.querySelector("div").classList.add("low_opacity");
-            setTimeout(()=>classList_remove(["red_theme", 'red_theme_outline']),row_num * 50)
+            let element =document.querySelectorAll(".red_theme")[document.querySelectorAll(".red_theme").length - 1]
+            if(!element) return;
+            const red_block_row = Math.floor(element.id.replace(/\D/g, "")/col_num);
+            setTimeout(()=>classList_remove(["red_theme", 'red_theme_outline']),(row_num - red_block_row - 2) * 50 )
+
           })
 
         })
@@ -71,7 +76,6 @@ th.querySelector("div").addEventListener("animationend", event => {
   })
 
 }
-
 
 
 
