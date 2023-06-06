@@ -177,7 +177,9 @@ const table = document.querySelector('#main_table');
 let row_num = 24;
 let col_num = 12;
 let preview_num = 5;
+let drop_speed = 200;
 const  block_list = [];
+
 
 
 //const table = document.querySelector('#main_table');
@@ -190,7 +192,7 @@ function classList_remove(name){
     return;
   }
   name.forEach(i=>{
-    document.querySelectorAll(`.${name}`).forEach(ele=>ele.classList.remove(i));
+    document.querySelectorAll(`.${i}`).forEach(ele=>ele.classList.remove(i));
 
   })
  
