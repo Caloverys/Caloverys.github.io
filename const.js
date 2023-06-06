@@ -183,3 +183,16 @@ const  block_list = [];
 //const table = document.querySelector('#main_table');
 
 
+
+function classList_remove(name){
+  if(!Array.isArray(name)){
+    document.querySelectorAll(`.${name}`).forEach(ele=>ele.classList.remove(name));
+    return;
+  }
+  name.forEach(i=>{
+    document.querySelectorAll(`.${name}`).forEach(ele=>ele.classList.remove(i));
+
+  })
+ 
+
+}
