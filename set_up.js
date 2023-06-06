@@ -53,7 +53,7 @@ th.querySelector("div").addEventListener("animationend", event => {
       event.target.classList.add("default_opacity")
 
       if (num === row_num * col_num - 1) {
-         console.log('whu')
+         //console.log('whu')
         Array.from(table.querySelectorAll("th")).forEach((th, num) => {
           th.querySelector("div").classList.add("opacity_animation_reverse");
           th.querySelector("div").style.animationDelay = `${Math.floor(num/col_num)/20}s`;
@@ -61,14 +61,20 @@ th.querySelector("div").addEventListener("animationend", event => {
             event.target.classList.remove("default_opacity")
 
             th.querySelector("div").classList.add("low_opacity");
-            let element =document.querySelectorAll(".red_theme")[document.querySelectorAll(".red_theme").length - 1]
-            if(!element) return;
-            const red_block_row = Math.floor(element.id.replace(/\D/g, "")/col_num);
-            setTimeout(()=>classList_remove(["red_theme", 'red_theme_outline']),(row_num - red_block_row - 2) * 50 )
 
           })
 
         })
+                    let element =document.querySelectorAll(".red_theme")[document.querySelectorAll(".red_theme").length - 1];
+                    console.log(element)
+            if(!element) return;
+            const red_block_row = Math.ceil(element.id.replace(/\D/g, "")/col_num);
+            console.log((row_num - red_block_row - 2) * 10)
+
+            setTimeout(()=>{
+             classList_remove(["red_theme", "red_theme_outline"]) ;
+            },(row_num - red_block_row - 2) * 10 );
+
       }
     
 
