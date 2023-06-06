@@ -79,12 +79,13 @@ simulate(class_name, is_preview){
           current_rect.classList.remove("rects_preview");
        
         current_rect.classList.add(class_name);
-        if(class_name === "red_theme" && i === this.structure.length - 1){
-          rects_list[this.init_y + i + 1][this.init_x+j].classList.add('red_theme_outline')
-        }
 
        
       }
+      if(class_name === "red_theme" && i === this.structure.length - 1){
+          if(rects_list[this.init_y + i + 1][this.init_x+j].classList.contains("lockd"))
+          rects_list[this.init_y + i + 1][this.init_x+j].classList.add('red_theme_outline')
+        }
     }
   }
 }
@@ -217,11 +218,10 @@ resetAll(){
 }
 function check_first_row(element){
   if(rects_list[0].some(ele=>ele.classList.contains("locked"))){
-       window.clearInterval(interval)
-         // debugger
-        console.log(element)
+     window.clearInterval(interval)
+
    element.simulate("red_theme");
-           //setTimeout(()=>{apply_animation()},2000)
+      setTimeout(()=>{apply_animation()},1500)
 
      return false;
   }
@@ -270,7 +270,6 @@ function shaking_effect(){
     table.classList.remove("shaking_effect")
   })
 }
-
 
 
 
