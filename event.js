@@ -71,13 +71,7 @@ simulate(class_name, is_preview){
   };
     for(let i =0; i< this.structure.length;i++){
     for(let j =0; j< this.structure[0].length;j++){
-      if(this.structure[i][j]){
-        //prevent the rects exceeding the top of the row
-        if(this.init_y + i < 0) {
-          console.log
-                 // debugger
-          break;
-        }
+      if(this.structure[i][j] && this.init_y + i >=0){
 
         let current_rect =  rects_list[this.init_y + i][this.init_x + j];
 
@@ -85,6 +79,9 @@ simulate(class_name, is_preview){
           current_rect.classList.remove("rects_preview");
        
         current_rect.classList.add(class_name);
+        if(class_name === "red_theme" && i === this.structure.length - 1){
+          rects_list[this.init_y + i + 1][this.init_x+j].classList.add('red_theme_outline')
+        }
 
        
       }
@@ -108,15 +105,7 @@ row_check(){
   });
 }
 update(){
-  if(!check_first_row()) {
-      window.clearInterval(interval)
-        console.log('update');
-            document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"));
-         apply_animation();
-//    this.simulate("red_border", false);
-  
-    return;
-  }
+
   if(check(this.init_x ,this.init_y + 1, this.structure)){
     this.init_y +=1;
     this.simulate("selected");
@@ -145,17 +134,9 @@ to_right(){
 
 }
 to_bottom(go_bottom){
-    //console.log('to_bottom')
-   if(!check_first_row()) {
-     window.clearInterval(interval)
-        console.log('tobottom');
-         document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"));
-        // apply_animation();
-  //  this.simulate("red_border", false);
-  
-    
-    return;
-  }
+     if(!check_first_row(this)) return;
+
+
   const orig_y = this.init_y;
   document.querySelectorAll('.rects_preview').forEach(ele=>ele.classList.remove("rects_preview"));
   for(let i =this.init_y; i<=row_num;i++){
@@ -208,17 +189,8 @@ to_rotate(){
 
 resetAll(){
 
-     if(!check_first_row()) {
-        window.clearInterval(interval)
-        console.log('resetAll');
-          document.querySelectorAll(".selected").forEach(ele=>ele.classList.remove("selected","locked"));
-         apply_animation();
-   // this.simulate("red_border", false);
-  
-    return;
-  }
+     if(!check_first_row(this)) return;
 
-console.log('fuck ')
    this.rotate_index = -1;
     window.clearInterval(interval);
   
@@ -243,17 +215,18 @@ console.log('fuck ')
 }
 
 }
-function check_first_row(){
-
+function check_first_row(element){
   if(rects_list[0].some(ele=>ele.classList.contains("locked"))){
+       window.clearInterval(interval)
+         // debugger
+        console.log(element)
+   element.simulate("red_theme");
+           //setTimeout(()=>{apply_animation()},2000)
 
-   
-
-
-    return false;
-
+     return false;
   }
   return true;
+
 
 }
 function exceed_bottom(init_y, structure){
@@ -274,7 +247,6 @@ function check(init_x, init_y, structure){
 }
 
 document.addEventListener("keydown", event => {
-//console.|| check_first_row()
 if(has_started ){
   if (event.key == " " || event.keyCode == 32) {
     block_list[0].to_bottom(true);
@@ -298,7 +270,6 @@ function shaking_effect(){
     table.classList.remove("shaking_effect")
   })
 }
-
 
 
 
