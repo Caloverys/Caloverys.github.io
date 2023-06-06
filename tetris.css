@@ -214,6 +214,7 @@ margin-bottom: calc(-1 * var(--rect_sideLength) - 3* var(--rect_border_size));
 margin-right: calc(-2 * var(--rect_border_size));
 top: calc(-2 * var(--rect_border_size));;
 left: calc(-1.5 * var(--rect_border_size));
+transform:translateY(calc( var(--rect_border_size) * -0.5));
 
 }
 
@@ -267,4 +268,3 @@ left: calc(-1.5 * var(--rect_border_size) - var(--rect_sideLength) - 2 * var(--r
     transform: translate(0.5px, -1px) rotate(-0.5deg);
   }
 }
-
