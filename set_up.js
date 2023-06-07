@@ -28,9 +28,7 @@ table.querySelectorAll('th').forEach(th=>{
               th.addEventListener("animationstart", event => {
             if(th.classList.contains("red_theme")){
             th.classList.remove("red_theme");
-            th.querySelector("div").classList.remove("red_theme_outline");
-            rects_list[]
-            Math.ceil(element.id.replace(/\D/g, "")/col_num);
+            document.querySelectorAll(".red_theme_outline").forEach(ele =>ele.classList.remove("red_theme_outline"));
           }
           })
    
@@ -83,6 +81,5 @@ th.querySelector("div").addEventListener("animationend", event => {
   })
 
 }
-
 
 
