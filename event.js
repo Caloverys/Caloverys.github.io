@@ -294,4 +294,3 @@ function shaking_effect(){
 
 
 
-
