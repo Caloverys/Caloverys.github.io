@@ -19,23 +19,30 @@ class Block{
     const shape_container = document.querySelector(`#${id}`);
 
   shape_container.appendChild(div);
-  let border_size = parseFloat(window.getComputedStyle(document.body).getPropertyValue("--rect_border_size"));
-  let rect_sideLength =parseFloat(window.getComputedStyle(document.body).getPropertyValue("--rect_sideLength"));
+  let border_size = 2;
+  //parseFloat(window.getComputedStyle(document.body).getPropertyValue("--rect_border_size"));
+  let rect_sideLength =20
+  //parseFloat(window.getComputedStyle(document.body).getPropertyValue("--rect_sideLength"));
     
     /* return the starting position needed for the shape to be centered relative to the shape container*/ 
 
     function init_pos(width,length,level){
       let container_width = parseFloat(window.getComputedStyle(shape_container).getPropertyValue("width"));
-      let container_height = parseFloat(window.getComputedStyle(shape_container).getPropertyValue("height"));
+      let h3_height = parseFloat(window.getComputedStyle(document.querySelector("h3")).getPropertyValue("height"));
+      console.log(h3_height)
+
+/*  the height of the h3 should not be taken account*/
+      let container_height = (parseFloat(window.getComputedStyle(shape_container).getPropertyValue("height"))- h3_height);
+
       if(level === -1){
          return {
     x: (container_width - width * (rect_sideLength + border_size)) / 2,
-    y: (container_height  - length * (rect_sideLength + border_size)) / 2
+    y: ((container_height   - length * (rect_sideLength + border_size)) / 2 +  h3_height)
   }
       }
       return {
     x: (container_width - width * (rect_sideLength + border_size)) / 2,
-    y: (container_height * level / 4 + (container_height / 4 - length * (rect_sideLength + border_size)) / 2)
+    y: (container_height * level / 4 +(container_height / 4 - length * (rect_sideLength + border_size)) / 2 + h3_height )
   }
     }
   for(let i =0; i< this.length; i++){
@@ -50,6 +57,7 @@ class Block{
     */
      rect.style.position = 'absolute';
       div.appendChild(rect);
+      console.log(window.getComputedStyle(document.body).getPropertyValue("--rect_sideLength"))
       rect.style.left = j * (rect_sideLength + border_size ) + init_pos(this.width, this.length,level).x+"px";
       rect.style.top = i * (rect_sideLength + border_size) + init_pos(this.width, this.length,level).y + "px";
   }
@@ -112,6 +120,7 @@ update(){
     this.simulate("selected");
   }
   else{
+    has_started = false;
     this.simulate('locked');
     this.row_check();
     this.resetAll();
@@ -208,9 +217,8 @@ resetAll(){
 
   block_list[0].simulate("selected");
   block_list[0].to_bottom(false);
-  interval = setInterval(()=>block_list[0].update(),drop_speed)
-
-
+  interval = setInterval(()=>block_list[0].update(),drop_speed);
+  has_started = true;
 
 
 }
@@ -249,6 +257,7 @@ function check(init_x, init_y, structure){
 
 document.addEventListener("keydown", event => {
 if(has_started){
+  if(!has_stopped){
   if (event.key == " " || event.keyCode == 32) {
     block_list[0].to_bottom(true);
     shaking_effect();
@@ -263,25 +272,42 @@ if(has_started){
     block_list[0].to_rotate();
   }
   else if(event.key.toLowerCase() == "s" || event.keyCode == 83 || event.key == "ArrowDown" || event.keyCode == 40){
-    window.clearInterval(interval);
-    drop_speed = 20;
-    interval = setInterval(()=>block_list[0].update(),drop_speed)
+    drop_speed = 50;
+    interval = setInterval(()=>block_list[0].update(),drop_speed);
   }
+
+  }
+}
+if(event.key.toLowerCase() == "p" || event.keyCode == 80){
+      if(!has_stopped){
+        window.clearInterval(interval);
+        has_stopped = true;
+        console.log("clear")
+       
+    } else{
+       interval = setInterval(()=>block_list[0].update(),drop_speed);
+       console.log("start")
+      has_stopped = false;
+    }
 }
 });
 document.addEventListener("keyup", event =>{
   if(event.key.toLowerCase() == "s" || event.keyCode == 83 || event.key == "ArrowDown" || event.keyCode == 40){
     window.clearInterval(interval);
     drop_speed = 200;
-    interval = setInterval(()=>block_list[0].update(),drop_speed)
+    interval = setInterval(()=>block_list[0].update(),drop_speed);
   }
 
-})
+});
 
 function shaking_effect(){
-  table.classList.add("shaking_effect");
+  //table.classList.add("shaking_effect");
+  document.querySelector("#table_outer_layout").classList.add("down_effect");
+  setTimeout(()=> document.querySelector("#table_outer_layout").classList.remove("down_effect"),200)
   table.addEventListener("animationend",function(){
-    table.classList.remove("shaking_effect")
+    table.classList.remove("shaking_effect");
+
+
   })
 }
 
