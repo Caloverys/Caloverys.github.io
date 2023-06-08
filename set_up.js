@@ -14,12 +14,15 @@ for (let j = 0; j < row_num; j++) {
   table.appendChild(tr);
 }
 
-function apply_animation() {
+function apply_animation(is_reset) {
+  if(is_reset){
 table.querySelectorAll('th').forEach(th=>{
+  //"low_opacity"
   th.querySelector("div").classList.remove("opacity_animation", "opacity_animation_reverse","low_opacity");
-  th.classList.remove("border_opacity_animation", "border_opacity_animation_reverse","low_border_color","high_border_color")
-  th.classList.remove("high_border_color")
+  th.classList.remove("border_opacity_animation", "border_opacity_animation_reverse", "low_border_color",)
+  //"low_border_color","high_border_color"
 })
+}
    Array.from(table.querySelectorAll("th")).reverse().forEach((th, num) => {
 
     th.querySelector("div").classList.add("opacity_animation");
