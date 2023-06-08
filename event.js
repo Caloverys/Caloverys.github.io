@@ -71,6 +71,11 @@ class Block{
 }
 simulate(class_name, is_preview){
   /* clear all the previous selected rects */
+  if(class_name == "red_theme" && document.querySelectorAll(".red_theme")){
+    classList_remove('red_theme');
+    window.clearTimeout(timeout)
+  }
+
   if(class_name ==='selected'){
     document.querySelectorAll('.selected').forEach(ele=>{
       if(!ele.classList.contains("locked"))
@@ -79,6 +84,7 @@ simulate(class_name, is_preview){
   };
     for(let i =0; i< this.structure.length;i++){
     for(let j =0; j< this.structure[0].length;j++){
+
       if(this.structure[i][j] && this.init_y + i >=0){
 
         let current_rect =  rects_list[this.init_y + i][this.init_x + j];
@@ -91,11 +97,14 @@ simulate(class_name, is_preview){
        
       }
       if(class_name === "red_theme" && i === this.structure.length - 1){
+        if(this.init_y + i + 1 <row_num) {
           if(rects_list[this.init_y + i + 1][this.init_x+j].classList.contains("locked"))
           rects_list[this.init_y + i + 1][this.init_x+j].classList.add('red_theme_outline')
         }
+      }
     }
   }
+
 }
 row_check(){
   rects_list.forEach((arr,index) =>{
@@ -123,7 +132,10 @@ update(){
   else{
     has_started = false;
     this.simulate('locked');
-    this.simulate('light_moving_effect')
+    this.simulate('red_theme');
+    const list_of_elements = document.querySelectorAll(".red_theme");
+    timeout = setTimeout(()=>list_of_elements.forEach(ele=>ele.classList.remove("red_theme")),75)
+
     this.row_check();
     this.resetAll();
   }
@@ -150,7 +162,7 @@ to_bottom(go_bottom){
 
 
   const orig_y = this.init_y;
-  document.querySelectorAll('.rects_preview').forEach(ele=>ele.classList.remove("rects_preview"));
+ classList_remove("rects_preview");
   for(let i =this.init_y; i<=row_num;i++){
           
     if(!check(this.init_x,i,this.structure)){
@@ -165,6 +177,10 @@ to_bottom(go_bottom){
          this.simulate('locked');
          this.row_check();
          this.resetAll();
+        shaking_effect();
+        this.simulate('red_theme');
+            const list_of_elements = document.querySelectorAll(".red_theme");
+    timeout = setTimeout(()=>list_of_elements.forEach(ele=>ele.classList.remove("red_theme")),75)
       }
       return;
 
@@ -202,11 +218,9 @@ to_rotate(){
 
 resetAll(){
      if(!check_first_row(this)) return;
-
    this.rotate_index = -1;
-       window.clearInterval(interval);
+      window.clearInterval(interval);
   has_stopped = false;
-
    block_list.shift();
    block_list.push(new Block(block_shape[Math.floor(Math.random() * 6)]) );
    document.querySelectorAll(".shape_container").forEach(ele=>ele.remove());
@@ -263,7 +277,6 @@ if(has_started){
   if(!has_stopped){
   if (event.key == " " || event.keyCode == 32) {
     block_list[0].to_bottom(true);
-    shaking_effect();
   }
   else if(event.key.toLowerCase() == "a"  || event.keyCode == 97 || event.key == "ArrowLeft" || event.keyCode == 37) {
     block_list[0].to_left();
@@ -276,7 +289,7 @@ if(has_started){
   }
   else if(event.key.toLowerCase() == "s" || event.keyCode == 83 || event.key == "ArrowDown" || event.keyCode == 40){
     window.clearInterval(interval)
-    drop_speed = 20;
+    drop_speed =40;
 
     interval = setInterval(()=>block_list[0].update(),drop_speed);
   }
@@ -311,8 +324,6 @@ function shaking_effect(){
   document.querySelector("#section_2").classList.add("down_effect");
   setTimeout(()=> document.querySelector("#section_2").classList.remove("down_effect"),200)
 }
-setInterval(()=>console.log("yes"),1000)
-
 
 
 
