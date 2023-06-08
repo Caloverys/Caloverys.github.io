@@ -187,13 +187,13 @@ div{
 	width:calc(var(--rect_sideLength) * 0.75); 
 	height:calc(var(--rect_sideLength) * 0.75); 
 }
-
 .low_border_color{
-	border-color:rgba(0,0,0,0.15)
-
+	border:var(--rect_border_size) solid rgba(0,0,0,0.15);
 }
+
+
 .high_border_color{
-	border-color:rgba(0,0,0,1);
+		border:var(--rect_border_size) solid rgba(0,0,0,1);
 
 }
 
@@ -292,10 +292,9 @@ h3{
 	top:0%;
 	left:0;
 	margin:0 auto;
-	padding-left:20px;
+	padding:2.5px 0 2.5px 20px;
 	width:calc(100% - 20px);
 height:min-content;
-/*	border-bottom:2px black solid;*/
 	font-family: arial;
 box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
@@ -304,6 +303,21 @@ box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 .position_relative{
 	position: relative;
 	height:100%;
+}
+
+.light_moving_effect{
+background: linear-gradient(90deg,#0000 33%,whitesmoke 50%,#0000 66%) rgba(220,220,220,0.9);
+background-size: 300% 100%;
+animation: moving 0.25s 1;
+
+}
+@keyframes moving{
+  from{
+    background-position: left;
+  }to{
+    background-position: right;
+  }
+
 }
 
 
