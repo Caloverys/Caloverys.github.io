@@ -1,14 +1,14 @@
 let times = 0;
 class Block{
-  constructor(option){
+  constructor(option, x,y,rotate_i){
       this.width = option.width;
     this.length = option.length;
     this.num = option.num;
     this.structure = option.structure;
     this.sequence = option.sequence;
-    this.init_x = Math.floor((Math.random() * (col_num-this.width+1)));
-    this.init_y = 0;
-    this.rotate_index = 0;
+    this.init_x = (x || Math.floor((Math.random() * (col_num-this.width+1))));
+    this.init_y = (y || 0);
+    this.rotate_index = (rotate_i || 0);
 
   }
   display(id, level){
@@ -124,6 +124,7 @@ row_check(){
   });
 }
 update(){
+  console.log(current_block)
 
   if(check(this.init_x ,this.init_y + 1, this.structure)){
     this.init_y +=1;
@@ -219,6 +220,11 @@ to_rotate(){
 resetAll(){
      if(!check_first_row(this)) return;
    this.rotate_index = -1;
+   //.replace(/\D/g, "")
+   console.log(Array(document.querySelectorAll(".locked")).map(i=>{
+    console.log(i)
+    return i = i.id;
+ }));
       window.clearInterval(interval);
   has_stopped = false;
    block_list.shift();
@@ -227,8 +233,6 @@ resetAll(){
    for(let i=0; i< block_list.length;i++){
      if(i===0) block_list[i].display("current_shape_preview",-1);
     else block_list[i].display("shape_preview",i-1);
-
-
    } 
 
   block_list[0].simulate("selected");
