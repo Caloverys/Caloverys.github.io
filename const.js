@@ -1,4 +1,5 @@
 let interval;
+let has_stopped = false;
 let has_started = false;
 const current_shape_list = [];
  const shape_container = document.querySelector("#shape_preview");
