@@ -1,4 +1,4 @@
-let interval;
+let interval,timeout;
 let has_stopped = false;
 let has_started = false;
 const current_shape_list = [];
