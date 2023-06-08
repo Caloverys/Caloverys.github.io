@@ -47,7 +47,35 @@
 <script>
 
 
-window.onload= function(){
+document.onreadystatechange= function(){
+  
+let saved_shape_preview = JSON.parse(localStorage.getItem("saved_shaped_preview"));
+let locked_rects = JSON.parse(localStorage.getItem("locked_rects"));
+console.log(locked_rects)
+let current_block = JSON.parse(localStorage.getItem("current_block"));
+console.log(saved_shape_preview )
+
+if(saved_shape_preview){
+  //create duplicate of the array 
+  block_list = saved_shape_preview.map((i,num)=>{
+    let block = new Block(block_shape[i]);
+    if(num === 0) block.display("current_shape_preview",-1)
+    else block.display("shape_preview",i-1);
+
+  return block;
+  });
+
+
+
+locked_rects.forEach(ele=>{
+  document.querySelector(`#${ele}`).classList.add("selected","locked");
+});
+block_list[0] = new Block(block_shape[current_block.sequence - 1], current_block.init_x, current_block.init_y, current_block.rotate_index);
+
+  return;
+
+}
+
 for(let i =0; i<preview_num;i++){
   let block = new Block(block_shape[Math.floor(Math.random() * 6)]);
   block_list.push(block);
@@ -56,18 +84,40 @@ for(let i =0; i<preview_num;i++){
 
 
 }
-apply_animation();
+ apply_animation();
+
+
+
  
 }
 
+
 document.querySelector("button").addEventListener("click", function(){
+  console.log(block_list[0])
   if(has_started) return;
         has_started = true;
+console.log(current_block)
   block_list[0].simulate("selected");
-  block_list[0].to_bottom(false);
+ block_list[0].to_bottom(false);
   interval = setInterval(()=>block_list[0].update(),drop_speed)
+ 
 
 })
+
+
+
+
+window.addEventListener("beforeunload",function(){
+  localStorage.setItem("saved_shaped_preview", JSON.stringify(block_list.map(i=>i.sequence - 1)));
+  let array = [];
+  [...document.querySelectorAll(".locked")].forEach(ele=>{
+    array.push(ele.id.toString())
+  })
+    localStorage.setItem("locked_rects", JSON.stringify(array));
+     localStorage.setItem("current_block", JSON.stringify(block_list[0]));
+   
+})
+
 
 
 </script>
