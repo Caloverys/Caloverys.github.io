@@ -84,4 +84,3 @@ th.querySelector("div").addEventListener("animationend", event => {
   })
 
 }
-
