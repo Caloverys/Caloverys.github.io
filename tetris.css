@@ -320,7 +320,11 @@ animation-delay: 0;
 
 
 
-
+button{
+	position: absolute;
+	top:10%;
+	left:10%;
+}
 
 
 
