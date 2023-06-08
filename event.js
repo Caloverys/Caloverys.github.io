@@ -28,8 +28,8 @@ class Block{
 
     function init_pos(width,length,level){
       let container_width = parseFloat(window.getComputedStyle(shape_container).getPropertyValue("width"));
-      let h3_height = parseFloat(window.getComputedStyle(document.querySelector("h3")).getPropertyValue("height"));
-      console.log(h3_height)
+      let h3_height = parseFloat(document.querySelector("h3").getBoundingClientRect().height);
+      
 
 /*  the height of the h3 should not be taken account*/
       let container_height = (parseFloat(window.getComputedStyle(shape_container).getPropertyValue("height"))- h3_height);
@@ -57,7 +57,7 @@ class Block{
     */
      rect.style.position = 'absolute';
       div.appendChild(rect);
-      console.log(window.getComputedStyle(document.body).getPropertyValue("--rect_sideLength"))
+      //console.log(window.getComputedStyle(document.body).getPropertyValue("--rect_sideLength"))
       rect.style.left = j * (rect_sideLength + border_size ) + init_pos(this.width, this.length,level).x+"px";
       rect.style.top = i * (rect_sideLength + border_size) + init_pos(this.width, this.length,level).y + "px";
   }
@@ -106,6 +106,7 @@ row_check(){
           if(rects_list[i][j].classList.contains("locked")){
             rects_list[i][j].classList.remove("locked","selected")
             rects_list[i+1][j].classList.add('locked',"selected");
+
           }
         }
       }
@@ -122,6 +123,7 @@ update(){
   else{
     has_started = false;
     this.simulate('locked');
+    this.simulate('light_moving_effect')
     this.row_check();
     this.resetAll();
   }
@@ -202,8 +204,8 @@ resetAll(){
      if(!check_first_row(this)) return;
 
    this.rotate_index = -1;
-    window.clearInterval(interval);
-  
+       window.clearInterval(interval);
+  has_stopped = false;
 
    block_list.shift();
    block_list.push(new Block(block_shape[Math.floor(Math.random() * 6)]) );
@@ -226,11 +228,12 @@ resetAll(){
 }
 function check_first_row(element){
   if(rects_list[0].some(ele=>ele.classList.contains("locked"))){
-     window.clearInterval(interval)
+     window.clearInterval(interval);
+
 
    element.simulate("red_theme");
 
-    setTimeout(()=>{apply_animation()},1500)
+    setTimeout(()=>{apply_animation(true)},1500);
 
      return false;
   }
@@ -272,24 +275,27 @@ if(has_started){
     block_list[0].to_rotate();
   }
   else if(event.key.toLowerCase() == "s" || event.keyCode == 83 || event.key == "ArrowDown" || event.keyCode == 40){
-    drop_speed = 50;
+    window.clearInterval(interval)
+    drop_speed = 20;
+
     interval = setInterval(()=>block_list[0].update(),drop_speed);
   }
 
   }
-}
-if(event.key.toLowerCase() == "p" || event.keyCode == 80){
+  if(event.key.toLowerCase() == "p" || event.keyCode == 80  ){
       if(!has_stopped){
         window.clearInterval(interval);
+        console.log('clear')
         has_stopped = true;
-        console.log("clear")
        
     } else{
+      console.log('start')
        interval = setInterval(()=>block_list[0].update(),drop_speed);
-       console.log("start")
       has_stopped = false;
     }
 }
+}
+
 });
 document.addEventListener("keyup", event =>{
   if(event.key.toLowerCase() == "s" || event.keyCode == 83 || event.key == "ArrowDown" || event.keyCode == 40){
@@ -301,16 +307,11 @@ document.addEventListener("keyup", event =>{
 });
 
 function shaking_effect(){
-  //table.classList.add("shaking_effect");
-  document.querySelector("#table_outer_layout").classList.add("down_effect");
-  setTimeout(()=> document.querySelector("#table_outer_layout").classList.remove("down_effect"),200)
-  table.addEventListener("animationend",function(){
-    table.classList.remove("shaking_effect");
 
-
-  })
+  document.querySelector("#section_2").classList.add("down_effect");
+  setTimeout(()=> document.querySelector("#section_2").classList.remove("down_effect"),200)
 }
-
+setInterval(()=>console.log("yes"),1000)
 
 
 
