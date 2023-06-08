@@ -1,4 +1,4 @@
-let interval,timeout;
+let interval,timeout,current_block;
 let has_stopped = false;
 let has_started = false;
 const current_shape_list = [];
@@ -179,7 +179,7 @@ let row_num = 24;
 let col_num = 12;
 let preview_num = 5;
 let drop_speed = 200;
-const  block_list = [];
+let block_list = [];
 
 
 
