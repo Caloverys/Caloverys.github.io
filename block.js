@@ -69,6 +69,7 @@ class Block{
 
 }
 simulate(class_name, is_preview){
+  console.log(class_name)
   /* clear all the previous selected rects */
   if(class_name == "red_theme" && document.querySelectorAll(".red_theme")){
     classList_remove('red_theme');
@@ -130,6 +131,18 @@ update(){
   }
   else{
     has_started = false;
+       this.simulate('locked');
+               this.simulate("appearance_animation");
+        this.simulate('red_theme');
+
+        this.row_check();
+ const list_of_elements_one = document.querySelectorAll(".red_theme");
+            const list_of_elements_two = document.querySelectorAll(".red_theme_outline");
+    timeout = setTimeout(()=>{
+      list_of_elements_one.forEach(ele=>ele.classList.remove("red_theme"),75);
+      list_of_elements_two.forEach(ele=>ele.classList.remove("red_theme_outline"),75)
+    },75);
+
 
     this.resetAll();
   }
@@ -167,9 +180,20 @@ to_bottom(go_bottom){
 
       }
       else{
+
          this.simulate("selected");
-          this.resetAll();
+                   this.simulate("appearance_animation");
+                 this.simulate('locked');
+          this.row_check()
+        this.simulate('red_theme');
+ const list_of_elements_one = document.querySelectorAll(".red_theme");
+            const list_of_elements_two = document.querySelectorAll(".red_theme_outline");
+    timeout = setTimeout(()=>{
+      list_of_elements_one.forEach(ele=>ele.classList.remove("red_theme"),75);
+      list_of_elements_two.forEach(ele=>ele.classList.remove("red_theme_outline"),75)
+    },75)
         shaking_effect();
+        this.resetAll();
             
       }
       return;
@@ -188,7 +212,12 @@ to_rotate(){
     }
     new_structure.push(subarray)
   }
-  if(!check(this.init_x, this.init_y, new_structure)) return;
+  if(!check(this.init_x, this.init_y, new_structure)){
+          if(this.init_x + new_structure[0].length >= col_num){
+        this.init_x -=  (new_structure[0].length + 1);
+
+      }
+  }
   this.structure = new_structure;
 
   new_structure = [];
@@ -196,6 +225,7 @@ to_rotate(){
     for(let i =1; i <= this.structure.length;i++){
     new_structure[this.structure.length - i] = this.structure[i-1]
     }
+          console.log(this.init_x, new_structure[0].length)
     if(!check(this.init_x, this.init_y, new_structure)) return;
     this.structure = new_structure;
     this.rotate_index = 0;
@@ -209,15 +239,7 @@ to_rotate(){
 resetAll(){
      if(!check_first_row(this)) return;
    this.rotate_index = -1;
-       this.simulate('locked');
-        this.simulate('red_theme');
-        this.row_check();
- const list_of_elements_one = document.querySelectorAll(".red_theme");
-            const list_of_elements_two = document.querySelectorAll(".red_theme_outline");
-    timeout = setTimeout(()=>{
-      list_of_elements_one.forEach(ele=>ele.classList.remove("red_theme"),75);
-      list_of_elements_two.forEach(ele=>ele.classList.remove("red_theme_outline"),75)
-    },75)
+
       window.clearInterval(interval);
   has_stopped = false;
    block_list.shift();
@@ -233,7 +255,6 @@ resetAll(){
 }
 
 }
-
 
 
 
