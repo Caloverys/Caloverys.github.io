@@ -274,7 +274,7 @@ left: calc(-1.5 * var(--rect_border_size) - var(--rect_sideLength) - 2 * var(--r
 }
 
 .down_effect{
-	transform: translateY(5px);
+	transform: translateY(3px);
 }
 
 .vertical_center{
@@ -321,11 +321,10 @@ animation-delay: 0;
 
 
 button{
-	position: absolute;
-	top:10%;
+	position: relative;
+	top:-200px;
 	left:10%;
 }
-
 
 
 
