@@ -178,7 +178,7 @@ const table = document.querySelector('#main_table');
 let row_num = 24;
 let col_num = 12;
 let preview_num = 5;
-let drop_speed = 200;
+let drop_speed = 2000;
 let block_list = [];
 
 
@@ -196,6 +196,59 @@ function classList_remove(name){
     document.querySelectorAll(`.${i}`).forEach(ele=>ele.classList.remove(i));
 
   })
- 
+}
+
+function display_block(){
+  for(let i=0; i< block_list.length;i++){
+     if(i===0) block_list[i].display("current_shape_preview",-1);
+    else block_list[i].display("shape_preview",i-1);
+   } 
 
 }
+
+function exceed_bottom(init_y, structure){
+return init_y + structure.length > row_num;
+}
+
+
+function check(init_x, init_y, structure){
+
+  if(init_x < 0 || init_x + structure[0].length > col_num || exceed_bottom(init_y,structure)) return false;
+
+  for(let i =0; i<structure.length;i++){
+    for(let j =0; j< structure[0].length;j++){
+      if(structure[i][j] === 1 && rects_list[init_y + i][init_x + j].classList.contains("locked"))
+        return false
+    }
+  }
+  return true;
+
+}
+
+
+
+function shaking_effect(){
+
+  document.querySelector("#section_2").classList.add("down_effect");
+  setTimeout(()=> document.querySelector("#section_2").classList.remove("down_effect"),75)
+}
+
+
+function check_first_row(element){
+  if(rects_list[0].some(ele=>ele.classList.contains("locked"))){
+   has_started = false;
+     window.clearInterval(interval);
+   element.simulate("red_theme");
+   localStorage.clear();
+
+    setTimeout(()=>apply_animation(true),1500);
+
+     return false;
+  }
+  return true;
+
+
+}
+
+
+
