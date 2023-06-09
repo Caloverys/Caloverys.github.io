@@ -6,7 +6,7 @@ for (let j = 0; j < row_num; j++) {
     th.id = `th_${i + col_num*j}`
 
     th.className = "parent rect";
-    th.innerHTML = `<div  class='small_rect'></div>`
+    th.innerHTML = `<div class='small_rect'></div>`
     tr.appendChild(th);
     sub_list.push(th);
   }
@@ -17,10 +17,8 @@ for (let j = 0; j < row_num; j++) {
 function apply_animation(is_reset) {
   if(is_reset){
 table.querySelectorAll('th').forEach(th=>{
-  //"low_opacity"
   th.querySelector("div").classList.remove("opacity_animation", "opacity_animation_reverse","low_opacity");
   th.classList.remove("border_opacity_animation", "border_opacity_animation_reverse", "low_border_color",)
-  //"low_border_color","high_border_color"
 })
 }
    Array.from(table.querySelectorAll("th")).reverse().forEach((th, num) => {
@@ -84,3 +82,7 @@ th.querySelector("div").addEventListener("animationend", event => {
   })
 
 }
+
+
+
+
