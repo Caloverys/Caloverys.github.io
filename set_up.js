@@ -69,10 +69,13 @@ th.querySelector("div").addEventListener("animationend", event => {
             event.target.classList.remove("default_opacity")
 
             th.querySelector("div").classList.add("low_opacity");
+            th.style.animationDelay = "0s";
+              th.querySelector("div").style.animationDelay = "0s"
 
           })
 
         })
+
 
 
       }
@@ -82,7 +85,6 @@ th.querySelector("div").addEventListener("animationend", event => {
   })
 
 }
-
 
 
 
