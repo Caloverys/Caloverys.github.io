@@ -178,7 +178,7 @@ const table = document.querySelector('#main_table');
 let row_num = 24;
 let col_num = 12;
 let preview_num = 5;
-let drop_speed = 2000;
+let drop_speed = 200;
 let block_list = [];
 
 
@@ -249,6 +249,5 @@ function check_first_row(element){
 
 
 }
-
 
 
