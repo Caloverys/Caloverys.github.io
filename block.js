@@ -69,7 +69,7 @@ class Block {
   }
   simulate(class_name, is_preview) {
     /* clear all the previous selected rects */
-    if (class_name == "red_theme" && document.querySelectorAll(".red_theme")) {
+    if (class_name == "red_theme" && document.querySelectorAll(".red_theme").length > 0) {
       classList_remove('red_theme');
       window.clearTimeout(timeout)
     }
@@ -77,7 +77,7 @@ class Block {
     if (class_name === 'selected') {
       document.querySelectorAll('.selected').forEach(ele => {
         if (!ele.classList.contains("locked"))
-          ele.classList.remove('selected')
+          ele.classList.remove('selected');
       });
     };
     for (let i = 0; i < this.structure.length; i++) {
@@ -94,6 +94,7 @@ class Block {
 
 
         }
+        
         if (class_name === "red_theme" && i === this.structure.length - 1) {
           if (this.init_y + i + 1 < row_num) {
             if (rects_list[this.init_y + i + 1][this.init_x + j].classList.contains("locked"))
@@ -129,16 +130,20 @@ class Block {
     } else {
       has_started = false;
       this.simulate('locked');
-      this.simulate("appearance_animation");
       this.simulate('red_theme');
-
+       setTimeout(()=>this.simulate("appearance_animation"),75)
       this.row_check();
-      const list_of_elements_one = document.querySelectorAll(".red_theme");
-      const list_of_elements_two = document.querySelectorAll(".red_theme_outline");
-      timeout = setTimeout(() => {
-        list_of_elements_one.forEach(ele => ele.classList.remove("red_theme"), 75);
-        list_of_elements_two.forEach(ele => ele.classList.remove("red_theme_outline"), 75)
-      }, 75);
+       
+
+          const list_of_elements_one = document.querySelectorAll(".red_theme");
+          const list_of_elements_two = document.querySelectorAll(".red_theme_outline");
+          timeout = setTimeout(() => {
+            list_of_elements_one.forEach(ele => ele.classList.remove("red_theme"));
+            list_of_elements_two.forEach(ele => ele.classList.remove("red_theme_outline"))
+          }, 75)
+          setTimeout(()=>{
+            list_of_elements_one.forEach(ele=>ele.classList.remove("appearance_animation"));;
+          },300);
 
 
       this.resetAll();
@@ -181,13 +186,17 @@ class Block {
           this.simulate('locked');
           this.row_check()
           this.simulate('red_theme');
-          this.simulate("appearance_animation");
+          setTimeout(()=>this.simulate("appearance_animation"),75)
+
           const list_of_elements_one = document.querySelectorAll(".red_theme");
           const list_of_elements_two = document.querySelectorAll(".red_theme_outline");
           timeout = setTimeout(() => {
-            list_of_elements_one.forEach(ele => ele.classList.remove("red_theme"), 75);
-            list_of_elements_two.forEach(ele => ele.classList.remove("red_theme_outline"), 75)
+            list_of_elements_one.forEach(ele => ele.classList.remove("red_theme"));
+            list_of_elements_two.forEach(ele => ele.classList.remove("red_theme_outline"))
           }, 75)
+          setTimeout(()=>{
+            list_of_elements_one.forEach(ele=>ele.classList.remove("appearance_animation"));;
+          },400);
           shaking_effect();
           this.resetAll();
 
