@@ -207,7 +207,7 @@ class Block {
     }
   }
   to_rotate() {
-    if (this.rotate_index < 0) return;
+    if (this.rotate_index < 0 ) return;
     let new_structure = [];
     for (let i = 0; i < this.structure[0].length; i++) {
       let subarray = [];
@@ -217,14 +217,8 @@ class Block {
       }
       new_structure.push(subarray)
     }
-    if (!check(this.init_x, this.init_y, new_structure)) {
-      if (this.init_x + new_structure[0].length >= col_num) {
-        this.init_x -= (new_structure[0].length + 1);
-
-      }
-    }
-    this.structure = new_structure;
-
+    if (!check(this.init_x, this.init_y, new_structure)) return
+    this.structure = new_structure;           
     new_structure = [];
     if (this.rotate_index > 0) {
       for (let i = 1; i <= this.structure.length; i++) {
