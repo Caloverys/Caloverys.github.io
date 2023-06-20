@@ -241,7 +241,7 @@ function check_first_row(element){
    element.simulate("red_theme");
    localStorage.clear();
 
-    setTimeout(()=>apply_animation(true),1500);
+    apply_animation(true);
 
      return false;
   }
@@ -249,5 +249,4 @@ function check_first_row(element){
 
 
 }
-
 
