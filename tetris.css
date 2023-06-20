@@ -326,20 +326,15 @@ button{
 	left:10%;
 }
 .appearance_animation{
-	animation: appear ease-out 2s;
-	animation-delay: 0s;
+	animation: appear linear 0.3s;
 
 }
 
 @keyframes appear{
 	from{
-		opacity: 0.3;
-		transform: translateY(-1px);
+		transform: translateY(0.75px);
+		opacity:0.6;
+	}
 
-	}
-	to{
-		opacity:1;
-	}
 }
-
 
