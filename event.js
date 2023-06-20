@@ -116,6 +116,29 @@ document.addEventListener("keyup", event =>{
 
 });
 
+document.querySelector("#rotate_button").addEventListener("click", ()=>{
+  document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'r'}));
+});
+document.querySelector("#drop_button").addEventListener("click", ()=>{
+  document.dispatchEvent(new KeyboardEvent('keydown', {'key': ' '}));
+});
+document.querySelector("#pause_button").addEventListener("click", ()=>{
+  document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'p'}));
+});
+document.querySelector("#left_button").addEventListener("click", ()=>{
+  document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'a'}));
+});
+document.querySelector("#right_button").addEventListener("click", ()=>{
+  document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'd'}));
+});
+document.querySelector("#down_button").addEventListener("mousedown", ()=>{
+  document.dispatchEvent(new KeyboardEvent('keydown', {'key': 's'}));
+});
+document.querySelector("#down_button").addEventListener("mouseup", ()=>{
+  document.dispatchEvent(new KeyboardEvent('keyup', {'key': 's'}));
+});
+
+
 
 
 
