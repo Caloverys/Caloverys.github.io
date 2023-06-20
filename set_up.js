@@ -18,7 +18,7 @@ function apply_animation(is_reset) {
   if(is_reset){
 table.querySelectorAll('th').forEach(th=>{
   th.querySelector("div").classList.remove("opacity_animation", "opacity_animation_reverse","low_opacity");
-  th.classList.remove("border_opacity_animation", "border_opacity_animation_reverse", "low_border_color",)
+  th.classList.remove("border_opacity_animation", "border_opacity_animation_reverse", "low_border_color")
 })
 }
    Array.from(table.querySelectorAll("th")).reverse().forEach((th, num) => {
@@ -70,11 +70,19 @@ th.querySelector("div").addEventListener("animationend", event => {
 
             th.querySelector("div").classList.add("low_opacity");
             th.style.animationDelay = "0s";
-              th.querySelector("div").style.animationDelay = "0s"
+              th.querySelector("div").style.animationDelay = "0s";
+              if(num === row_num * col_num - 1){
+                  table.querySelectorAll('th').forEach(th=>{
+  th.querySelector("div").classList.remove("opacity_animation", "opacity_animation_reverse");
+  th.classList.remove("border_opacity_animation", "border_opacity_animation_reverse")
+})
+                }
 
           })
 
-        })
+
+        });
+
 
 
 
@@ -85,6 +93,7 @@ th.querySelector("div").addEventListener("animationend", event => {
   })
 
 }
+
 
 
 
