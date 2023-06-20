@@ -274,7 +274,7 @@ left: calc(-1.5 * var(--rect_border_size) - var(--rect_sideLength) - 2 * var(--r
 }
 
 .down_effect{
-	transform: translateY(3px);
+	transform: translateY(5px);
 }
 
 .vertical_center{
