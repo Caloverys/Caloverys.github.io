@@ -80,15 +80,26 @@ class Block {
           ele.classList.remove('selected');
       });
     };
-    for (let i = 0; i < this.structure.length; i++) {
+                console.log(this.init_x)
+    console.log(this.structure,this.init_y)
+
+    for (let i = this.structure.length-1; i >=0; i--) {
       for (let j = 0; j < this.structure[0].length; j++) {
-
-        if (this.structure[i][j] && this.init_y + i >= 0) {
-
+       //  if( this.init_y <0) debugger
+        if (this.structure[i][j] && this.init_y + i>=0) {
           let current_rect = rects_list[this.init_y + i][this.init_x + j];
+                    if(current_rect.classList.contains("locked") && class_name === "selected") {
+                      this.init_y -=1;
+                      console.log("lol", this.init_x)
+                      debugger
+                    }
 
-          if (current_rect.classList.contains("rects_preview") && !is_preview)
+          //console.log(current_rect, is_preview, class_name)
+          if(class_name ==="rects_preview" && this.init_y + i=== 0) break;
+          if (current_rect.classList.contains("rects_preview") && is_preview ===  undefined && class_name === "selected") {
             current_rect.classList.remove("rects_preview");
+          }
+          if(current_rect.classList.contains('selected') && class_name ==="rects_preview") break;
 
           current_rect.classList.add(class_name);
 
@@ -106,21 +117,25 @@ class Block {
 
   }
   row_check() {
+    let status = false;
     rects_list.forEach((arr, index) => {
       if (arr.some(ele => !ele.classList.contains("locked")) === false) {
         arr.forEach(ele => ele.classList.remove("locked", "selected"));
         for (let i = index - 1; i > 0; i--) {
           for (let j = 0; j < arr.length; j++) {
             if (rects_list[i][j].classList.contains("locked")) {
+             // debugger
               rects_list[i][j].classList.remove("locked", "selected")
               rects_list[i + 1][j].classList.add('locked', "selected");
+                  status = true;
 
-            }
-          }
         }
       }
+    }
+  }
 
     });
+    return status;
   }
   update() {
 
@@ -131,8 +146,8 @@ class Block {
       has_started = false;
       this.simulate('locked');
       this.simulate('red_theme');
-       setTimeout(()=>this.simulate("appearance_animation"),75)
-      this.row_check();
+      if(!this.row_check()){
+               setTimeout(()=>this.simulate("appearance_animation"),75)
        
 
           const list_of_elements_one = document.querySelectorAll(".red_theme");
@@ -145,6 +160,9 @@ class Block {
             list_of_elements_one.forEach(ele=>ele.classList.remove("appearance_animation"));;
           },300);
 
+      }
+
+
 
       this.resetAll();
     }
@@ -153,25 +171,26 @@ class Block {
   to_left() {
     if (check(this.init_x - 1, this.init_y, this.structure)) {
       this.init_x -= 1;
-      this.simulate("selected");
       this.to_bottom(false);
+      this.simulate("selected");
     }
   }
 
   to_right() {
     if (check(this.init_x + 1, this.init_y, this.structure)) {
       this.init_x += 1;
+        this.to_bottom(false);
       this.simulate("selected");
-      this.to_bottom(false);
     }
 
   }
   to_bottom(go_bottom) {
     if (!check_first_row(this)) return;
+  //  console.clear();
 
 
     const orig_y = this.init_y;
-    classList_remove("rects_preview");
+   classList_remove("rects_preview");
     for (let i = this.init_y; i <= row_num; i++) {
 
       if (!check(this.init_x, i, this.structure)) {
@@ -184,19 +203,22 @@ class Block {
 
           this.simulate("selected");
           this.simulate('locked');
-          this.row_check()
-          this.simulate('red_theme');
-          setTimeout(()=>this.simulate("appearance_animation"),75)
-
-          const list_of_elements_one = document.querySelectorAll(".red_theme");
+            this.simulate('red_theme');
+               const list_of_elements_one = document.querySelectorAll(".red_theme");
           const list_of_elements_two = document.querySelectorAll(".red_theme_outline");
           timeout = setTimeout(() => {
             list_of_elements_one.forEach(ele => ele.classList.remove("red_theme"));
             list_of_elements_two.forEach(ele => ele.classList.remove("red_theme_outline"))
           }, 75)
+          if(!this.row_check()){
+   setTimeout(()=>this.simulate("appearance_animation"),75)
+
+  
           setTimeout(()=>{
             list_of_elements_one.forEach(ele=>ele.classList.remove("appearance_animation"));;
           },400);
+          }
+       
           shaking_effect();
           this.resetAll();
 
@@ -244,8 +266,8 @@ class Block {
     document.querySelectorAll(".shape_container").forEach(ele => ele.remove());
     display_block();
     has_started = true;
+      block_list[0].to_bottom(false);
     block_list[0].simulate("selected");
-    block_list[0].to_bottom(false);
     interval = setInterval(() => block_list[0].update(), drop_speed);
 
 
