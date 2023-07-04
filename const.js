@@ -178,7 +178,7 @@ const table = document.querySelector('#main_table');
 let row_num = 24;
 let col_num = 12;
 let preview_num = 5;
-let drop_speed = 200;
+let drop_speed = 200000;
 let block_list = [];
 
 
@@ -213,8 +213,11 @@ return init_y + structure.length > row_num;
 
 function check(init_x, init_y, structure){
 
-  if(init_x < 0 || init_x + structure[0].length > col_num || exceed_bottom(init_y,structure)) return false;
 
+  if(init_x < 0 || init_y < 0 || init_x + structure[0].length > col_num || exceed_bottom(init_y,structure)){
+    debugger
+return false;
+  } 
   for(let i =0; i<structure.length;i++){
     for(let j =0; j< structure[0].length;j++){
       if(structure[i][j] === 1 && rects_list[init_y + i][init_x + j].classList.contains("locked"))
@@ -249,4 +252,3 @@ function check_first_row(element){
 
 
 }
-
